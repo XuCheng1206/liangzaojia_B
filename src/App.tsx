@@ -430,7 +430,7 @@ const FOLLOWING_DATA = [
 
 // --- Components ---
 
-const HomeCarousel = () => {
+const HomeCarousel = ({ onClick }: { onClick: () => void }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const slides = [
     {
@@ -462,7 +462,10 @@ const HomeCarousel = () => {
 
   return (
     <div className="px-4 py-3">
-      <div className="relative h-30 rounded-[24px] overflow-hidden shadow-xl group">
+      <div 
+        onClick={onClick}
+        className="relative h-30 rounded-[24px] overflow-hidden shadow-xl group cursor-pointer"
+      >
         <AnimatePresence mode="wait">
           <motion.div
             key={currentIndex}
@@ -7769,6 +7772,91 @@ const OtherSettingsPage = ({ onBack }: { onBack: () => void }) => {
   );
 };
 
+const BannerDetailPage = ({ onBack }: { onBack: () => void }) => {
+  return (
+    <motion.div 
+      initial={{ opacity: 0, x: 20 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: -20 }}
+      className="fixed inset-0 z-[200] bg-white flex flex-col"
+    >
+      <div className="sticky top-0 z-10 bg-white/80 backdrop-blur-md px-4 py-4 flex items-center gap-4 border-b border-gray-100">
+        <button onClick={onBack} className="p-1 hover:bg-gray-100 rounded-full">
+          <ChevronLeft className="w-6 h-6 text-gray-800" />
+        </button>
+        <h1 className="text-lg font-bold text-gray-900">详情介绍</h1>
+      </div>
+
+      <div className="flex-1 overflow-y-auto">
+        <div className="relative h-56 overflow-hidden">
+          <img 
+            src="https://images.unsplash.com/photo-1541746972996-4e0b0f43e02a?auto=format&fit=crop&q=80&w=1200" 
+            className="w-full h-full object-cover"
+            referrerPolicy="no-referrer"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex flex-col justify-end p-6">
+            <h2 className="text-2xl font-black text-white leading-tight">良造家：打造建筑装饰行业的数字诚信新生态</h2>
+          </div>
+        </div>
+
+        <div className="p-6 space-y-8">
+          <section className="space-y-4">
+            <div className="flex items-center gap-2">
+              <div className="w-1 h-5 bg-amber-500 rounded-full" />
+              <h3 className="text-lg font-bold text-slate-900">项目背景</h3>
+            </div>
+            <p className="text-sm text-slate-600 leading-relaxed">
+              在传统的建筑装饰行业中，信息不对称、信任缺失、抽佣过高等问题长期制约着行业的发展。优秀的设计师和工长往往因为缺乏有效的展示窗口和信誉背书，难以直接触达高端业主，造成了极大的资源浪费。
+            </p>
+          </section>
+
+          <section className="space-y-4">
+            <div className="flex items-center gap-2">
+              <div className="w-1 h-5 bg-blue-500 rounded-full" />
+              <h3 className="text-lg font-bold text-slate-900">核心优势</h3>
+            </div>
+            <div className="grid grid-cols-1 gap-4">
+              {[
+                { title: '海量真实线索', desc: '平台通过大数据匹配，为从业者提供最真实、最高端的装修项目线索。', icon: Target },
+                { title: '0平台抽佣', desc: '打破传统平台高额抽佣模式，让劳动果实全额归还给辛勤付出的从业者。', icon: Coins },
+                { title: '数字诚信档案', desc: '基于区块链技术，永久记录每一项工程数据，打造不可篡改的职业口碑。', icon: ShieldCheck },
+                { title: '专业落地服务', desc: '良造家专业服务团队全流程指导，确保项目从线索到交付的平稳落地。', icon: Sparkles }
+              ].map((item, i) => (
+                <div key={i} className="flex gap-4 p-4 bg-slate-50 rounded-2xl">
+                  <div className="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center flex-shrink-0">
+                    <item.icon className="w-5 h-5 text-indigo-600" />
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-bold text-slate-900 mb-1">{item.title}</h4>
+                    <p className="text-xs text-slate-500 leading-relaxed">{item.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          <section className="space-y-4">
+            <div className="flex items-center gap-2">
+              <div className="w-1 h-5 bg-emerald-500 rounded-full" />
+              <h3 className="text-lg font-bold text-slate-900">未来展望</h3>
+            </div>
+            <p className="text-sm text-slate-600 leading-relaxed italic border-l-2 border-emerald-100 pl-4 py-1">
+              "我们的目标不仅仅是一个平台，更是一个属于匠人的数字化成长引擎。在良造家，每一份匠心都将被看见，每一份价值都将被肯定。"
+            </p>
+          </section>
+        </div>
+        
+        <div className="p-6 border-t border-slate-50 bg-slate-50/50">
+          <p className="text-[10px] text-slate-400 text-center leading-relaxed">
+            良造家数字平台 © 2026 版权所有<br />
+            致力于重塑行业信任，赋能建筑装饰每一个细微角落。
+          </p>
+        </div>
+      </div>
+    </motion.div>
+  );
+};
+
 export default function App() {
   const [page, setPage] = useState<string>('home');
   const [detailSource, setDetailSource] = useState<'home' | 'cases' | 'lead-list'>('home');
@@ -7881,7 +7969,7 @@ export default function App() {
               onModeClick={() => setPage('mode-intro')}
               onPublishClick={() => handleOpenPublish()}
             />
-            <HomeCarousel />
+            <HomeCarousel onClick={() => setPage('banner-detail')} />
             <TrustStatsBar />
             <CoreModeSection onModeClick={() => setPage('mode-intro')} />
             <HighEndRecruitment onSelectRecruitment={handleSelectRecruitment} />
@@ -7909,6 +7997,7 @@ export default function App() {
           </motion.div>
         )}
         {page === 'search' && <SearchPage onBack={() => setPage('home')} />}
+        {page === 'banner-detail' && <BannerDetailPage onBack={() => setPage('home')} />}
         {page === 'practitioner-certification' && (
           <PractitionerCertificationPage onBack={() => setPage('home')} />
         )}
