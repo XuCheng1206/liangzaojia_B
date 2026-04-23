@@ -1,0 +1,41 @@
+name: Deploy Vite Site to Pages
+
+on:
+  push:
+    branches: ["main"] # 监听 main 分支的代码推送
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci # 使用 ci 确保依赖安装更稳定
+
+      - name: Build
+        run: npm run build # 核心步骤：将你的 TSX 源码“翻译”成浏览器能懂的 HTML/JS
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './dist' # 告诉 GitHub 发布打包出来的 dist 文件夹
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
