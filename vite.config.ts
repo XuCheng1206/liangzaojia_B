@@ -6,11 +6,19 @@ import {defineConfig, loadEnv} from 'vite';
 export default defineConfig(({mode}) => {
   const env = loadEnv(mode, '.', '');
   return {
+    // 1. 核心修复：指定 GitHub Pages 的子路径
+    base: '/liangzaojia_B/', 
+    
+    // 2. 插件配置
     plugins: [react(), tailwindcss()],
+    
+    // 3. 环境变量与全局变量
     define: {
       'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY),
       'global': 'window',
     },
+    
+    // 4. 路径别名设置
     resolve: {
       alias: {
         '@': path.resolve(__dirname, '.'),
@@ -20,11 +28,13 @@ export default defineConfig(({mode}) => {
         'isomorphic-fetch': path.resolve(__dirname, 'src/fetch-shim.ts'),
       },
     },
+    
+    // 5. 开发服务器设置
     server: {
-      // HMR is disabled in AI Studio via DISABLE_HMR env var.
-      // Do not modify—file watching is disabled to prevent flickering during agent edits.
       hmr: process.env.DISABLE_HMR !== 'true',
     },
+    
+    // 6. 打包优化
     build: {
       rollupOptions: {
         output: {
