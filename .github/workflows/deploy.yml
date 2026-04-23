@@ -2,7 +2,7 @@ name: Deploy Vite Site to Pages
 
 on:
   push:
-    branches: ["main"] # 监听 main 分支的代码推送
+    branches: ["main"]
 
 permissions:
   contents: read
@@ -11,6 +11,10 @@ permissions:
 
 jobs:
   build-and-deploy:
+    # 这一行是重点：告诉 GitHub 使用 Pages 的发布环境
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -23,10 +27,10 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm ci # 使用 ci 确保依赖安装更稳定
+        run: npm install # 换成 install 兼容性更好
 
       - name: Build
-        run: npm run build # 核心步骤：将你的 TSX 源码“翻译”成浏览器能懂的 HTML/JS
+        run: npm run build
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
@@ -34,7 +38,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './dist' # 告诉 GitHub 发布打包出来的 dist 文件夹
+          path: './dist'
 
       - name: Deploy to GitHub Pages
         id: deployment
