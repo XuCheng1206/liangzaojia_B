@@ -2,7 +2,7 @@
  * @license
  * SPDX-License-Identifier: Apache-2.0
  */
-//
+
 import React, { useState, useEffect } from 'react';
 import { Search, Bell, LayoutGrid, Users, FileText, FileX, Box, MapPin, Flame, Plus, Home, User, ChevronLeft, Heart, Play, Layers, MessageCircle, Bookmark, Share2, X, UserPlus, Send, MoreHorizontal, Link, MessageSquare, Image, Video, Camera, ArrowRight, Pencil, Phone, PhoneCall, BookOpen, ClipboardCheck, LogOut, ChevronRight, ChevronDown, Award, Eye, Clock, AlertCircle, CheckCircle2, Power, ArrowUpCircle, Building2, Map, Upload, Sparkles, Wand2, Maximize2, Minimize2, CreditCard, PieChart, BarChart3, Zap, Star, Fingerprint, Shield, Copy, Wallet, Briefcase, Activity, GraduationCap, Medal, ThumbsUp, Target, CalendarCheck, Smile, QrCode, IdCard, Crown, PenTool, HardHat, Globe, History, Handshake, Check, Monitor, ShieldCheck, Lock, Ban, XCircle, AlertTriangle, TrendingDown, TrendingUp, Hammer, Construction, ShieldAlert, UserCheck, Database, Quote, Cpu, Coins, Gift, Palette, Settings, HelpCircle, LayoutDashboard, Edit3, Trash2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
@@ -430,7 +430,7 @@ const FOLLOWING_DATA = [
 
 // --- Components ---
 
-const HomeCarousel = ({ onClick }: { onClick: () => void }) => {
+const HomeCarousel = ({ onClick }: { onClick: (index: number) => void }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const slides = [
     {
@@ -463,7 +463,7 @@ const HomeCarousel = ({ onClick }: { onClick: () => void }) => {
   return (
     <div className="px-4 py-3">
       <div 
-        onClick={onClick}
+        onClick={() => onClick(currentIndex)}
         className="relative h-30 rounded-[24px] overflow-hidden shadow-xl group cursor-pointer"
       >
         <AnimatePresence mode="wait">
@@ -7772,7 +7772,87 @@ const OtherSettingsPage = ({ onBack }: { onBack: () => void }) => {
   );
 };
 
-const BannerDetailPage = ({ onBack }: { onBack: () => void }) => {
+const BANNER_DETAILS = [
+  {
+    title: "赋能优秀匠人 开启事业新篇",
+    subtitle: "助力设计师与工长连接高端需求，实现职业溢价",
+    image: "https://images.unsplash.com/photo-1541746972996-4e0b0f43e02a?auto=format&fit=crop&q=80&w=1200",
+    sections: [
+      {
+        title: "事业加速器",
+        content: "良造家致力于打破传统装修行业的信息茧房，通过智能匹配算法，将优质的项目直接推送给匹配的匠人，减少无效拓客成本。",
+        color: "bg-amber-500",
+        items: [
+          { title: "精准推送", desc: "根据您的专业擅长，推送匹配度最高的装修线索。", icon: Target },
+          { title: "身份背书", desc: "平台级的金牌认证，提升您的专业形象与获客成功率。", icon: Award }
+        ]
+      },
+      {
+        title: "成长路径",
+        content: "我们不仅提供业务，更提供职业成长的阶梯，包括数字化的个人品牌建设和行业交流机会。",
+        color: "bg-blue-500",
+        items: [
+          { title: "数字简历", desc: "您的每一个成功案例都将被数字化存储，形成强大的职业背书。", icon: IdCard },
+          { title: "同行交流", desc: "加入高端匠人社区，分享经验，共创价值。", icon: Users }
+        ]
+      }
+    ]
+  },
+  {
+    title: "透明交付体系 0抽佣金",
+    subtitle: "把利润留给创造者，重塑装饰行业价值链",
+    image: "https://images.unsplash.com/photo-1454165833767-027ffea70215?auto=format&fit=crop&q=80&w=1200",
+    sections: [
+      {
+        title: "商业模式革新",
+        content: "传统装修平台往往抽取高达20%-40%的佣金，严重挤压了从业者的利润空间。良造家坚持0抽佣，让每一分辛苦所得都归属于匠人自身。",
+        color: "bg-orange-500",
+        items: [
+          { title: "全额收益", desc: "拒绝中间商赚差价，合同额就是您的到手额。", icon: Coins },
+          { title: "透明结算", desc: "基于智能合约的阶段性支付，保障资金安全。", icon: ShieldCheck }
+        ]
+      },
+      {
+        title: "沟通直连",
+        content: "平台提倡去中间化，让匠人与业主能够直接、透明地沟通，减少信息传递误差，提高交付质量。",
+        color: "bg-indigo-500",
+        items: [
+          { title: "高效沟通", desc: "平台提供专业辅助沟通工具，确保需求传递精准。", icon: MessageSquare },
+          { title: "交付保障", desc: "标准化的交付流程指引，让项目验收更有条理。", icon: ClipboardCheck }
+        ]
+      }
+    ]
+  },
+  {
+    title: "数字诚信档案 职业资产",
+    subtitle: "用数据见证匠心，让信用成为您的商业名片",
+    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=1200",
+    sections: [
+      {
+        title: "信用数字化",
+        content: "在良造家，您的信誉不再是空谈。所有的完工评价、项目质量记录都将被不可篡改地记录下来。",
+        color: "bg-emerald-500",
+        items: [
+          { title: "永久存储", desc: "基于区块链技术存储信用轨迹，永久有效。", icon: History },
+          { title: "权重激励", desc: "信用等级越高，获得的优质线索推送权重越大。", icon: Crown }
+        ]
+      },
+      {
+        title: "口碑资产化",
+        content: "我们将您的良好口碑转化为可以量化的职业资产，帮助您在激烈的市场竞争中脱颖而出。",
+        color: "bg-purple-500",
+        items: [
+          { title: "荣誉勋章", desc: "完成里程碑项目可获得平台颁发的荣誉勋章。", icon: Medal },
+          { title: "品牌传播", desc: "平台协助优秀匠人进行全网品牌营销，打造个人IP。", icon: Sparkles }
+        ]
+      }
+    ]
+  }
+];
+
+const BannerDetailPage = ({ index, onBack }: { index: number, onBack: () => void }) => {
+  const detail = BANNER_DETAILS[index] || BANNER_DETAILS[0];
+
   return (
     <motion.div 
       initial={{ opacity: 0, x: 20 }}
@@ -7790,65 +7870,46 @@ const BannerDetailPage = ({ onBack }: { onBack: () => void }) => {
       <div className="flex-1 overflow-y-auto">
         <div className="relative h-56 overflow-hidden">
           <img 
-            src="https://images.unsplash.com/photo-1541746972996-4e0b0f43e02a?auto=format&fit=crop&q=80&w=1200" 
+            src={detail.image} 
             className="w-full h-full object-cover"
             referrerPolicy="no-referrer"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex flex-col justify-end p-6">
-            <h2 className="text-2xl font-black text-white leading-tight">良造家：打造建筑装饰行业的数字诚信新生态</h2>
+            <h2 className="text-2xl font-black text-white leading-tight">{detail.title}</h2>
+            <p className="text-white/80 text-sm mt-2">{detail.subtitle}</p>
           </div>
         </div>
 
-        <div className="p-6 space-y-8">
-          <section className="space-y-4">
-            <div className="flex items-center gap-2">
-              <div className="w-1 h-5 bg-amber-500 rounded-full" />
-              <h3 className="text-lg font-bold text-slate-900">项目背景</h3>
-            </div>
-            <p className="text-sm text-slate-600 leading-relaxed">
-              在传统的建筑装饰行业中，信息不对称、信任缺失、抽佣过高等问题长期制约着行业的发展。优秀的设计师和工长往往因为缺乏有效的展示窗口和信誉背书，难以直接触达高端业主，造成了极大的资源浪费。
-            </p>
-          </section>
-
-          <section className="space-y-4">
-            <div className="flex items-center gap-2">
-              <div className="w-1 h-5 bg-blue-500 rounded-full" />
-              <h3 className="text-lg font-bold text-slate-900">核心优势</h3>
-            </div>
-            <div className="grid grid-cols-1 gap-4">
-              {[
-                { title: '海量真实线索', desc: '平台通过大数据匹配，为从业者提供最真实、最高端的装修项目线索。', icon: Target },
-                { title: '0平台抽佣', desc: '打破传统平台高额抽佣模式，让劳动果实全额归还给辛勤付出的从业者。', icon: Coins },
-                { title: '数字诚信档案', desc: '基于区块链技术，永久记录每一项工程数据，打造不可篡改的职业口碑。', icon: ShieldCheck },
-                { title: '专业落地服务', desc: '良造家专业服务团队全流程指导，确保项目从线索到交付的平稳落地。', icon: Sparkles }
-              ].map((item, i) => (
-                <div key={i} className="flex gap-4 p-4 bg-slate-50 rounded-2xl">
-                  <div className="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center flex-shrink-0">
-                    <item.icon className="w-5 h-5 text-indigo-600" />
+        <div className="p-6 space-y-10 pb-20">
+          {detail.sections.map((section, idx) => (
+            <section key={idx} className="space-y-4">
+              <div className="flex items-center gap-2">
+                <div className={cn("w-1 h-5 rounded-full", section.color)} />
+                <h3 className="text-lg font-bold text-slate-900">{section.title}</h3>
+              </div>
+              <p className="text-sm text-slate-600 leading-relaxed">
+                {section.content}
+              </p>
+              <div className="grid grid-cols-1 gap-4 mt-4">
+                {section.items.map((item, i) => (
+                  <div key={i} className="flex gap-4 p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                    <div className="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center flex-shrink-0">
+                      <item.icon className="w-5 h-5 text-indigo-600" />
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-bold text-slate-900 mb-1">{item.title}</h4>
+                      <p className="text-xs text-slate-500 leading-relaxed">{item.desc}</p>
+                    </div>
                   </div>
-                  <div>
-                    <h4 className="text-sm font-bold text-slate-900 mb-1">{item.title}</h4>
-                    <p className="text-xs text-slate-500 leading-relaxed">{item.desc}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </section>
-
-          <section className="space-y-4">
-            <div className="flex items-center gap-2">
-              <div className="w-1 h-5 bg-emerald-500 rounded-full" />
-              <h3 className="text-lg font-bold text-slate-900">未来展望</h3>
-            </div>
-            <p className="text-sm text-slate-600 leading-relaxed italic border-l-2 border-emerald-100 pl-4 py-1">
-              "我们的目标不仅仅是一个平台，更是一个属于匠人的数字化成长引擎。在良造家，每一份匠心都将被看见，每一份价值都将被肯定。"
-            </p>
-          </section>
+                ))}
+              </div>
+            </section>
+          ))}
         </div>
         
         <div className="p-6 border-t border-slate-50 bg-slate-50/50">
           <p className="text-[10px] text-slate-400 text-center leading-relaxed">
-            良造家数字平台 © 2026 版权所有<br />
+            已经到底了 · 良造家数字平台 © 2026 版权所有<br />
             致力于重塑行业信任，赋能建筑装饰每一个细微角落。
           </p>
         </div>
@@ -7859,6 +7920,7 @@ const BannerDetailPage = ({ onBack }: { onBack: () => void }) => {
 
 export default function App() {
   const [page, setPage] = useState<string>('home');
+  const [selectedBannerIndex, setSelectedBannerIndex] = useState(0);
   const [detailSource, setDetailSource] = useState<'home' | 'cases' | 'lead-list'>('home');
   const [selectedCase, setSelectedCase] = useState<typeof CASE_DATA[0] | null>(null);
   const [selectedLead, setSelectedLead] = useState<typeof PROJECT_LEADS_DATA[0] | null>(null);
@@ -7969,7 +8031,10 @@ export default function App() {
               onModeClick={() => setPage('mode-intro')}
               onPublishClick={() => handleOpenPublish()}
             />
-            <HomeCarousel onClick={() => setPage('banner-detail')} />
+            <HomeCarousel onClick={(index) => {
+              setSelectedBannerIndex(index);
+              setPage('banner-detail');
+            }} />
             <TrustStatsBar />
             <CoreModeSection onModeClick={() => setPage('mode-intro')} />
             <HighEndRecruitment onSelectRecruitment={handleSelectRecruitment} />
@@ -7997,7 +8062,12 @@ export default function App() {
           </motion.div>
         )}
         {page === 'search' && <SearchPage onBack={() => setPage('home')} />}
-        {page === 'banner-detail' && <BannerDetailPage onBack={() => setPage('home')} />}
+        {page === 'banner-detail' && (
+          <BannerDetailPage 
+            index={selectedBannerIndex} 
+            onBack={() => setPage('home')} 
+          />
+        )}
         {page === 'practitioner-certification' && (
           <PractitionerCertificationPage onBack={() => setPage('home')} />
         )}
