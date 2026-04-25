@@ -751,44 +751,27 @@ const DigitalWorldModule = ({ onClick }: { onClick: () => void }) => (
   </div>
 );
 
-const SecondaryGrid = ({ onInitiatorClick, onRecommendClick }: { onInitiatorClick: () => void, onRecommendClick: () => void }) => (
-  <div className="px-4 py-2 grid grid-cols-2 gap-3">
+const SecondaryGrid = ({ onInitiatorClick }: { onInitiatorClick: () => void }) => (
+  <div className="px-4 py-2">
     {/* Project Initiator - Moved here */}
     <motion.div 
       whileTap={{ scale: 0.98 }}
       onClick={onInitiatorClick}
-      className="relative overflow-hidden rounded-2xl p-4 bg-gradient-to-br from-amber-500 to-orange-600 shadow-lg border border-white/10 group cursor-pointer"
+      className="relative overflow-hidden rounded-2xl p-6 py-7 bg-gradient-to-br from-amber-500 to-orange-600 shadow-lg border border-white/10 group cursor-pointer border-indigo-100"
     >
-      <div className="relative z-10 flex flex-col justify-between h-full">
-        <div>
-          <div className="w-8 h-8 rounded-lg bg-white/10 backdrop-blur-md flex items-center justify-center mb-3">
-            <Coins className="w-5 h-5 text-white" />
+      <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2" />
+      <div className="relative z-10 flex items-center justify-between h-full">
+        <div className="flex items-center gap-4">
+          <div className="w-12 h-12 rounded-xl bg-white/20 backdrop-blur-md flex items-center justify-center">
+            <Coins className="w-6 h-6 text-white" />
           </div>
-          <h4 className="text-sm font-black text-white">项目发起人</h4>
-          <p className="text-[10px] text-white/70 font-medium mt-1">提供线索 享高额佣金</p>
-        </div>
-        <div className="mt-4 flex items-center gap-1 text-white/90 text-[10px] font-bold">
-          立即变现 <ArrowRight className="w-3 h-3" />
-        </div>
-      </div>
-    </motion.div>
-
-    {/* Recommend - Small */}
-    <motion.div 
-      whileTap={{ scale: 0.98 }}
-      onClick={onRecommendClick}
-      className="relative overflow-hidden rounded-2xl p-4 bg-blue-600 shadow-lg border border-white/10 group cursor-pointer"
-    >
-      <div className="relative z-10 flex flex-col justify-between h-full">
-        <div>
-          <div className="w-8 h-8 rounded-lg bg-white/10 backdrop-blur-md flex items-center justify-center mb-3">
-            <Gift className="w-5 h-5 text-white" />
+          <div>
+            <h4 className="text-lg font-black text-white">项目发起人</h4>
+            <p className="text-xs text-white/80 font-medium mt-0.5">提供线索 享高额佣金</p>
           </div>
-          <h4 className="text-sm font-black text-white">推荐有礼</h4>
-          <p className="text-[10px] text-white/70 font-medium mt-1">邀同行入驻 领奖励</p>
         </div>
-        <div className="mt-4 flex items-center gap-1 text-white/90 text-[10px] font-bold">
-          邀人得钱 <ArrowRight className="w-3 h-3" />
+        <div className="flex items-center gap-1 text-white bg-white/20 px-4 py-2.5 rounded-full text-sm font-bold shadow-sm">
+          立即变现 <ArrowRight className="w-4 h-4 ml-0.5" />
         </div>
       </div>
     </motion.div>
@@ -1343,7 +1326,7 @@ const HighEndDesignerDetailPage = ({ onBack }: { onBack: () => void }) => {
       {/* Fixed Bottom Action */}
       <div className="sticky bottom-0 bg-white border-t border-gray-100 p-4 pb-safe">
         <button className="w-full py-4 bg-gradient-to-r from-[#2C2C2C] to-[#1A1A1A] text-[#D4AF37] font-bold rounded-2xl shadow-xl shadow-black/10 active:scale-[0.98] transition-all border border-[#D4AF37]/30">
-          提交申请资料
+          申请加入严选设计师
         </button>
       </div>
     </motion.div>
@@ -1992,7 +1975,7 @@ const HighEndStudioDetailPage = ({ onBack }: { onBack: () => void }) => {
       {/* Fixed Bottom Action */}
       <div className="sticky bottom-0 bg-white border-t border-gray-100 p-4 pb-safe">
         <button className="w-full py-4 bg-gradient-to-r from-[#2C2C2C] to-[#1A1A1A] text-[#D4AF37] font-bold rounded-2xl shadow-xl shadow-black/10 active:scale-[0.98] transition-all border border-[#D4AF37]/30">
-          提交申请资料
+          申请加入严选设计工作室
         </button>
       </div>
     </motion.div>
@@ -2353,19 +2336,13 @@ const ListSection = (props: {
           <button 
             className="h-full flex items-center text-[15px] font-bold transition-all relative px-1 text-gray-900"
           >
-            商机
+            线索
             <motion.div 
               layoutId="activeTab" 
               className="absolute bottom-0 left-0 right-0 h-[3px] bg-[#07c160] rounded-t-full" 
             />
           </button>
         </div>
-        <button 
-          onClick={onSearchClick}
-          className="p-2 -mr-2 text-gray-400 hover:text-gray-600 active:scale-90 transition-all"
-        >
-          <Search className="w-5 h-5" />
-        </button>
       </div>
 
       <div className="flex flex-col gap-3 pb-6">
@@ -8041,7 +8018,6 @@ export default function App() {
             <DigitalWorldModule onClick={() => setPage('digital-world')} />
             <SecondaryGrid 
               onInitiatorClick={() => setPage('initiator-recruitment')}
-              onRecommendClick={() => setPage('recommend-practitioner')} 
             />
             <GridMenu onItemClick={(id) => {
               if (id === 'combined_projects') handleOpenPublish('form', 'lead');
