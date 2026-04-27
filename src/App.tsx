@@ -128,21 +128,6 @@ function cn(...inputs: ClassValue[]) {
 
 // --- Mock Data ---
 
-const GRID_ITEMS = [
-  {
-    id: "combined_projects",
-    label: "发布线索",
-    sub: "线索招募 | 实时更新",
-    icon: Briefcase,
-  },
-  {
-    id: "certification",
-    label: "从业者认证",
-    sub: "官方背书 | 优先派单",
-    icon: ShieldCheck,
-  },
-];
-
 const LIST_ITEMS = [
   {
     id: 1,
@@ -641,38 +626,6 @@ const HomeCarousel = ({ onClick }: { onClick: (index: number) => void }) => {
   );
 };
 
-const TrustStatsBar = () => (
-  <div className="px-6 py-4">
-    <div className="flex items-center justify-between">
-      <div className="flex flex-col items-start">
-        <span className="text-xl font-black text-slate-900 leading-none">
-          5,800+
-        </span>
-        <span className="text-[10px] text-slate-400 font-bold mt-1 uppercase tracking-wider">
-          本月新增线索
-        </span>
-      </div>
-      <div className="w-px h-8 bg-slate-200" />
-      <div className="flex flex-col items-start">
-        <span className="text-xl font-black text-slate-900 leading-none">
-          ¥2.4亿
-        </span>
-        <span className="text-[10px] text-slate-400 font-bold mt-1 uppercase tracking-wider">
-          累计结算金额
-        </span>
-      </div>
-      <div className="w-px h-8 bg-slate-200" />
-      <div className="flex flex-col items-start">
-        <span className="text-xl font-black text-slate-900 leading-none">
-          100%
-        </span>
-        <span className="text-[10px] text-slate-400 font-bold mt-1 uppercase tracking-wider">
-          资金安全保障
-        </span>
-      </div>
-    </div>
-  </div>
-);
 
 const CoreModeSection = ({ onModeClick }: { onModeClick: () => void }) => (
   <div className="px-4 py-2">
@@ -781,8 +734,10 @@ const SearchHeader = ({
 
 const HighEndRecruitment = ({
   onSelectRecruitment,
+  onCertificationClick,
 }: {
   onSelectRecruitment: (item: any) => void;
+  onCertificationClick?: () => void;
 }) => {
   const highEndData = [
     {
@@ -878,128 +833,82 @@ const HighEndRecruitment = ({
         </motion.div>
       </div>
 
+      {/* Practitioner Certification Integrated */}
       <div className="mt-6 pt-5 border-t border-white/5 relative z-10">
-        <div className="flex items-center justify-between text-white/40 text-[10px] font-medium">
-          <div className="flex items-center gap-1.5">
-            <ShieldCheck className="w-3.5 h-3.5 text-amber-500" />
-            官方实名认证
+        <motion.div
+          whileTap={{ scale: 0.99 }}
+          onClick={onCertificationClick}
+          className="flex items-center justify-between text-white bg-white/5 p-3 rounded-xl border border-white/10 cursor-pointer group hover:bg-white/10 transition-all"
+        >
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-lg bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center">
+              <ShieldCheck className="w-4 h-4 text-emerald-500" />
+            </div>
+            <div>
+              <p className="text-[12px] font-bold text-white">从业者认证</p>
+              <p className="text-[9px] text-white/40">官方背书 · 优先派单 · 工艺直达</p>
+            </div>
           </div>
-          <div className="flex items-center gap-1.5">
-            <Award className="w-3.5 h-3.5 text-amber-500" />
-            匠心工艺背书
-          </div>
-        </div>
+          <ChevronRight className="w-4 h-4 text-white/20 group-hover:text-white/40 transition-colors" />
+        </motion.div>
       </div>
     </div>
   );
 };
 
-const DigitalWorldModule = ({ onClick }: { onClick: () => void }) => (
-  <div className="px-4 py-2">
-    <motion.div
-      whileTap={{ scale: 0.98 }}
-      onClick={onClick}
-      className="relative overflow-hidden rounded-2xl p-4 bg-slate-900 border border-slate-800 group cursor-pointer shadow-lg"
-    >
-      {/* Tech Background Elements */}
-      <motion.div
-        animate={{ opacity: [0.1, 0.3, 0.1] }}
-        transition={{ duration: 4, repeat: Infinity }}
-        className="absolute -right-4 -top-4 w-24 h-24 bg-blue-500/20 rounded-full blur-2xl"
-      />
-      <div className="absolute -left-4 -bottom-4 w-20 h-20 bg-indigo-500/10 rounded-full blur-2xl" />
-
-      <div className="relative z-10 flex items-center gap-3">
-        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500/20 to-indigo-500/20 border border-blue-500/40 flex items-center justify-center shadow-[0_0_15px_rgba(59,130,246,0.3)] flex-shrink-0">
-          <motion.div
-            animate={{ rotate: 360 }}
-            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-          >
-            <Cpu className="w-5 h-5 text-blue-400" />
-          </motion.div>
-        </div>
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-1.5 mb-1">
-            <span className="text-[8px] font-bold text-blue-400 tracking-[0.2em] uppercase">
-              Professional Digital Assets
-            </span>
-            <div className="h-[1px] flex-1 bg-gradient-to-r from-blue-500/50 to-transparent" />
-          </div>
-          <h3 className="text-[12px] font-black text-white leading-tight tracking-tight">
-            打造您的<span className="text-blue-400">数字诚信档案</span>
-            ，沉淀职业资产
-          </h3>
-        </div>
-        <div className="w-7 h-7 rounded-full bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-blue-500/20 group-hover:border-blue-500/40 transition-all flex-shrink-0">
-          <ArrowRight className="w-3.5 h-3.5 text-blue-400" />
-        </div>
-      </div>
-
-      {/* Scanning Line Effect */}
-      <motion.div
-        animate={{ top: ["0%", "100%"], opacity: [0, 0.5, 0] }}
-        transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-        className="absolute left-0 right-0 h-px bg-gradient-to-r from-transparent via-blue-400 to-transparent z-20 pointer-events-none"
-      />
-    </motion.div>
-  </div>
-);
-
 const SecondaryGrid = ({
   onInitiatorClick,
+  onPublishClick,
 }: {
   onInitiatorClick: () => void;
+  onPublishClick?: () => void;
 }) => (
-  <div className="px-4 py-2">
-    {/* Project Initiator - Moved here */}
+  <div className="px-4 py-2 grid grid-cols-2 gap-3">
+    {/* Project Initiator */}
     <motion.div
       whileTap={{ scale: 0.98 }}
       onClick={onInitiatorClick}
-      className="relative overflow-hidden rounded-2xl p-6 py-7 bg-gradient-to-br from-amber-500 to-orange-600 shadow-lg border border-white/10 group cursor-pointer border-indigo-100"
+      className="relative overflow-hidden rounded-2xl p-4 bg-gradient-to-br from-amber-500 to-orange-600 shadow-lg border border-white/10 group cursor-pointer"
     >
-      <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2" />
-      <div className="relative z-10 flex items-center justify-between h-full">
-        <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-white/20 backdrop-blur-md flex items-center justify-center">
-            <Coins className="w-6 h-6 text-white" />
-          </div>
-          <div>
-            <h4 className="text-lg font-black text-white">项目发起人</h4>
-            <p className="text-xs text-white/80 font-medium mt-0.5">
-              提供线索 享高额佣金
-            </p>
-          </div>
+      <div className="absolute top-0 right-0 w-24 h-24 bg-white/10 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2" />
+      <div className="relative z-10 flex flex-col justify-between h-full min-h-[100px]">
+        <div className="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-md flex items-center justify-center mb-3">
+          <Coins className="w-5 h-5 text-white" />
         </div>
-        <div className="flex items-center gap-1 text-white bg-white/20 px-4 py-2.5 rounded-full text-sm font-bold shadow-sm">
-          立即变现 <ArrowRight className="w-4 h-4 ml-0.5" />
+        <div>
+          <h4 className="text-[13px] font-black text-white">项目发起人</h4>
+          <p className="text-[9px] text-white/80 font-medium mt-0.5 leading-tight">
+            提供线索 享高额佣金
+          </p>
+          <div className="mt-3 flex items-center gap-1 text-[10px] font-bold text-white/90">
+            立即变现 <ArrowRight className="w-3 h-3" />
+          </div>
         </div>
       </div>
     </motion.div>
-  </div>
-);
 
-const GridMenu = ({ onItemClick }: { onItemClick: (id: string) => void }) => (
-  <div className="px-4 py-2 grid grid-cols-2 gap-2.5 bg-white">
-    {GRID_ITEMS.map((item) => (
-      <motion.div
-        key={item.id}
-        whileTap={{ scale: 0.98 }}
-        onClick={() => onItemClick(item.id)}
-        className="relative overflow-hidden p-2.5 rounded-2xl shadow-sm flex items-center gap-2 border cursor-pointer group hover:shadow-md transition-all bg-gradient-to-b from-white to-slate-50/80 border-slate-200/60 hover:border-slate-300"
-      >
-        <div className="p-2 rounded-xl flex-shrink-0 shadow-sm border transition-colors relative z-10 bg-white border-slate-100 group-hover:bg-slate-50">
-          <item.icon className="w-4 h-4 transition-colors text-slate-700 group-hover:text-slate-900" />
+    {/* Lead Recruitment Card */}
+    <motion.div
+      whileTap={{ scale: 0.98 }}
+      onClick={onPublishClick}
+      className="relative overflow-hidden rounded-2xl p-4 bg-white shadow-sm border border-slate-100 group cursor-pointer hover:shadow-md transition-all active:bg-slate-50"
+    >
+      <div className="absolute top-0 right-0 w-24 h-24 bg-blue-500/5 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2" />
+      <div className="relative z-10 flex flex-col justify-between h-full min-h-[100px]">
+        <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center mb-3 shadow-sm group-hover:scale-110 transition-transform">
+          <Briefcase className="w-5 h-5 text-blue-600" />
         </div>
-        <div className="min-w-0 flex-1 relative z-10">
-          <div className="text-[13px] font-bold transition-colors leading-tight text-slate-800 group-hover:text-slate-900">
-            {item.label}
-          </div>
-          <div className="text-[9px] mt-0.5 leading-tight whitespace-nowrap tracking-tight text-slate-500">
-            {item.sub}
+        <div>
+          <h4 className="text-[13px] font-black text-slate-900 line-clamp-1">发布线索</h4>
+          <p className="text-[9px] text-slate-500 font-medium mt-0.5 leading-tight">
+            线索招募 | 实时更新
+          </p>
+          <div className="mt-3 flex items-center gap-1 text-[10px] font-bold text-blue-600">
+            立即发布 <ArrowRight className="w-3 h-3" />
           </div>
         </div>
-      </motion.div>
-    ))}
+      </div>
+    </motion.div>
   </div>
 );
 
@@ -2984,13 +2893,7 @@ const ListSection = (props: {
         new Date(b.publishTime).getTime() - new Date(a.publishTime).getTime(),
     );
 
-  const discoveryData = [];
-  const maxLength = Math.max(sortedLeads.length, sortedRecruitments.length);
-  for (let i = 0; i < maxLength; i++) {
-    if (i < sortedLeads.length) discoveryData.push(sortedLeads[i]);
-    if (i < sortedRecruitments.length)
-      discoveryData.push(sortedRecruitments[i]);
-  }
+  const discoveryData = sortedLeads;
 
   const currentData = discoveryData;
 
@@ -11631,9 +11534,27 @@ export default function App() {
     item: (typeof PROJECT_LEADS_DATA)[0],
     source: "home" | "lead-list" = "home",
   ) => {
-    setSelectedLead(item);
+    const mappedLead = {
+      id: item.id,
+      name: "匿名客户",
+      phone: "138****0000",
+      project: item.title,
+      location: item.community,
+      status: "待分配",
+      date: item.publishTime,
+      area: item.area,
+      style: item.tags[0],
+      budget: item.budget,
+      duration: "暂无",
+      detailReq: item.detailedRequirement,
+      remark: "通过首页列表查看",
+      source: "平台分发",
+      provider: "系统推荐",
+      assignee: "待领取",
+    };
+    setSelectedLead(mappedLead as any);
     setDetailSource(source === "home" ? "home" : "cases");
-    setPage("lead-detail");
+    setPage("op-lead-detail");
   };
 
   const handleSelectRecruitment = (
@@ -11733,20 +11654,14 @@ export default function App() {
                 setPage("banner-detail");
               }}
             />
-            <TrustStatsBar />
             <CoreModeSection onModeClick={() => setPage("mode-intro")} />
-            <HighEndRecruitment onSelectRecruitment={handleSelectRecruitment} />
-            <DigitalWorldModule onClick={() => setPage("digital-world")} />
+            <HighEndRecruitment
+              onSelectRecruitment={handleSelectRecruitment}
+              onCertificationClick={() => setPage("practitioner-certification")}
+            />
             <SecondaryGrid
               onInitiatorClick={() => setPage("initiator-recruitment")}
-            />
-            <GridMenu
-              onItemClick={(id) => {
-                if (id === "combined_projects")
-                  handleOpenPublish("form", "lead");
-                if (id === "certification")
-                  setPage("practitioner-certification");
-              }}
+              onPublishClick={() => handleOpenPublish("form", "lead")}
             />
             <ListSection
               onSelectCase={(item) => {
@@ -11893,7 +11808,10 @@ export default function App() {
             <OpLeadListPage
               onBack={() => setPage("profile")}
               onNavigate={(p, lead) => {
-                if (lead) setSelectedLead(lead);
+                if (lead) {
+                  setSelectedLead(lead);
+                  setDetailSource("lead-list");
+                }
                 setPage(p);
               }}
             />
@@ -11918,7 +11836,13 @@ export default function App() {
           >
             <OpLeadDetailPage
               lead={selectedLead}
-              onBack={() => setPage("op-lead-list")}
+              onBack={() => {
+                if (detailSource === "home" && page === "op-lead-detail") {
+                  setPage("home");
+                } else {
+                  setPage("op-lead-list");
+                }
+              }}
             />
           </motion.div>
         )}
