@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Search,
   Bell,
@@ -697,13 +697,11 @@ const CoreModeSection = ({ onModeClick }: { onModeClick: () => void }) => (
 const SearchHeader = ({
   city,
   onCityClick,
-  onModeClick,
-  onPublishClick,
+  onMyLeadsClick,
 }: {
   city: string;
   onCityClick: () => void;
-  onModeClick: () => void;
-  onPublishClick: () => void;
+  onMyLeadsClick: () => void;
 }) => (
   <div className="sticky top-0 z-[60] bg-gray-50/80 backdrop-blur-xl border-b border-gray-200/50">
     <div className="px-4 h-[54px] flex items-center">
@@ -721,10 +719,10 @@ const SearchHeader = ({
         </h1>
         <div className="flex items-center gap-2">
           <button
-            onClick={onPublishClick}
-            className="w-8 h-8 bg-[#FF9800] rounded-full flex items-center justify-center text-white shadow-lg shadow-orange-500/40 active:scale-90 transition-transform"
+            onClick={onMyLeadsClick}
+            className="px-3 py-1.5 bg-amber-500 rounded-full flex items-center justify-center text-white shadow-lg shadow-orange-500/20 active:scale-95 transition-all text-[11px] font-bold"
           >
-            <Plus className="w-5 h-5 stroke-[4px]" />
+            我的线索
           </button>
         </div>
       </div>
@@ -1065,39 +1063,56 @@ const ProjectLeadCard = (props: {
     <motion.div
       whileHover={{ y: -2 }}
       onClick={onClick}
-      className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 cursor-pointer"
+      className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 cursor-pointer group"
     >
-      <div className="flex-1 min-w-0 flex flex-col justify-between">
-        <div>
-          <h3 className="text-sm font-bold text-gray-900 truncate mb-1">
-            {item.title}
-          </h3>
-          <div className="flex items-center gap-2 text-[10px] text-gray-500 mb-2">
-            <MapPin className="w-3 h-3" />
-            <span>{item.community}</span>
-            <span className="text-gray-200">|</span>
-            <span>{item.area}m²</span>
-            <span className="text-gray-200">|</span>
-            <span>{item.houseType}</span>
-            <span className="text-gray-200">|</span>
-            <span>{item.type}</span>
+      <div className="flex flex-col gap-3">
+        <h3 className="text-[15px] font-black text-gray-900 group-hover:text-amber-500 transition-colors line-clamp-1">
+          {item.title}
+        </h3>
+        
+        <div className="grid grid-cols-2 gap-y-2.5 gap-x-4">
+          <div className="flex items-center gap-2 text-gray-500">
+            <MapPin className="w-3.5 h-3.5 flex-shrink-0 text-gray-400" />
+            <span className="text-[12px] font-medium truncate">
+              {item.community}
+            </span>
           </div>
-          <div className="flex flex-wrap gap-1.5">
-            {item.tags.map((tag) => (
-              <span
-                key={tag}
-                className="px-2 py-0.5 bg-emerald-50 text-emerald-600 text-[10px] rounded-md border border-emerald-100"
-              >
-                {tag}
-              </span>
-            ))}
+          <div className="flex items-center gap-2 text-gray-500">
+            <Maximize2 className="w-3.5 h-3.5 flex-shrink-0 text-gray-400" />
+            <span className="text-[12px] font-medium truncate">
+              {item.houseType} {item.area}㎡
+            </span>
+          </div>
+          <div className="flex items-center gap-2 text-gray-500">
+            <Coins className="w-3.5 h-3.5 flex-shrink-0 text-amber-500" />
+            <span className="text-[12px] font-bold text-slate-700 truncate">
+              {item.budget}
+            </span>
+          </div>
+          <div className="flex items-center gap-2 text-gray-500">
+            <Clock className="w-3.5 h-3.5 flex-shrink-0 text-blue-500" />
+            <span className="text-[12px] font-medium truncate">
+              工期：由合同约定
+            </span>
           </div>
         </div>
-        <div className="flex items-center justify-between mt-2">
-          <span className="text-[10px] text-gray-400">{item.publishTime}</span>
-          <button className="px-3 py-1 bg-gray-900 text-white text-[10px] font-bold rounded-full">
-            查看线索
-          </button>
+
+        <div className="flex flex-wrap gap-1.5 mt-1">
+          {item.tags.slice(0, 3).map((tag) => (
+            <span
+              key={tag}
+              className="px-2 py-0.5 bg-gray-50 text-gray-400 text-[10px] rounded-md border border-gray-100 font-medium"
+            >
+              {tag}
+            </span>
+          ))}
+        </div>
+
+        <div className="flex items-center justify-between pt-3 border-t border-gray-50">
+          <span className="text-[10px] text-gray-400 font-medium">{item.publishTime}</span>
+          <div className="flex items-center gap-1 text-[11px] font-black text-amber-600 group-hover:translate-x-1 transition-transform">
+            立即查看 <ChevronRight className="w-3.5 h-3.5" />
+          </div>
         </div>
       </div>
     </motion.div>
@@ -11517,6 +11532,11 @@ export default function App() {
     setIsPublishOpen(true);
   };
   const [selectedCity, setSelectedCity] = useState("北京");
+  const listSectionRef = useRef<HTMLDivElement>(null);
+
+  const scrollToLeads = () => {
+    listSectionRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
   const [opsCenterCity, setOpsCenterCity] = useState("北京");
   const [isCityModalOpen, setIsCityModalOpen] = useState(false);
   const [isWorkspaceActive, setIsWorkspaceActive] = useState(false);
@@ -11645,8 +11665,7 @@ export default function App() {
             <SearchHeader
               city={selectedCity}
               onCityClick={() => setIsCityModalOpen(true)}
-              onModeClick={() => setPage("mode-intro")}
-              onPublishClick={() => handleOpenPublish()}
+              onMyLeadsClick={scrollToLeads}
             />
             <HomeCarousel
               onClick={(index) => {
@@ -11663,18 +11682,20 @@ export default function App() {
               onInitiatorClick={() => setPage("initiator-recruitment")}
               onPublishClick={() => handleOpenPublish("form", "lead")}
             />
-            <ListSection
-              onSelectCase={(item) => {
-                if (item.type === "lead") {
-                  handleSelectLead(item, "home");
-                } else if (item.type === "recruitment") {
-                  handleSelectRecruitment(item);
-                } else {
-                  handleSelectCase(item, "home");
-                }
-              }}
-              onSearchClick={() => setPage("search")}
-            />
+            <div ref={listSectionRef}>
+              <ListSection
+                onSelectCase={(item) => {
+                  if (item.type === "lead") {
+                    handleSelectLead(item, "home");
+                  } else if (item.type === "recruitment") {
+                    handleSelectRecruitment(item);
+                  } else {
+                    handleSelectCase(item, "home");
+                  }
+                }}
+                onSearchClick={() => setPage("search")}
+              />
+            </div>
           </motion.div>
         )}
         {page === "search" && <SearchPage onBack={() => setPage("home")} />}
