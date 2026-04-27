@@ -10118,7 +10118,139 @@ const MyRequirementsPage = ({ onBack }: { onBack: () => void }) => {
   );
 };
 
-const PractitionerCertificationPage = ({ onBack }: { onBack: () => void }) => {
+const LearningCenterPage = ({ onBack }: { onBack: () => void }) => {
+  const categories = ["全部", "工艺标准", "良知素养"];
+  const [activeCategory, setActiveCategory] = useState("全部");
+
+  const learningVideos = [
+    {
+      id: 1,
+      title: "高端全案设计交付标准流程",
+      cover: "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?q=80&w=800",
+      duration: "15:20",
+      views: "1.2w",
+      category: "工艺标准",
+      isCompleted: true
+    },
+    {
+      id: 2,
+      title: "如何提高豪宅客户的谈单转化率",
+      cover: "https://images.unsplash.com/photo-1574139908280-1a055d054c30?q=80&w=800",
+      duration: "25:40",
+      views: "8500",
+      category: "良知素养",
+      isCompleted: false
+    },
+    {
+      id: 3,
+      title: "大宅水电隐蔽工程施工标准",
+      cover: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?q=80&w=800",
+      duration: "12:15",
+      views: "3200",
+      category: "工艺标准",
+      isCompleted: false
+    }
+  ];
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, x: 20 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: -20 }}
+      className="fixed inset-0 z-[300] bg-slate-50 flex flex-col"
+    >
+      <div className="sticky top-0 z-10 bg-white px-4 py-4 flex items-center justify-between border-b border-slate-100">
+        <div className="flex items-center gap-4">
+          <button
+            onClick={onBack}
+            className="p-1 hover:bg-slate-100 rounded-full transition-colors"
+          >
+            <ChevronLeft className="w-6 h-6 text-slate-800" />
+          </button>
+          <h1 className="text-lg font-bold text-slate-900">学习中心</h1>
+        </div>
+      </div>
+
+      <div className="flex-1 overflow-y-auto">
+        {/* Categories */}
+        <div className="bg-white px-4 py-3 flex gap-2 overflow-x-auto hide-scrollbar sticky top-0 z-[5]">
+          {categories.map((cat) => (
+            <button
+              key={cat}
+              onClick={() => setActiveCategory(cat)}
+              className={cn(
+                "px-4 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all border",
+                activeCategory === cat
+                  ? "bg-slate-900 text-white border-slate-900 shadow-lg shadow-slate-200"
+                  : "bg-slate-50 text-slate-500 border-slate-100"
+              )}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
+
+        {/* Video List */}
+        <div className="p-4 space-y-4">
+          {learningVideos
+            .filter(v => activeCategory === "全部" || v.category === activeCategory)
+            .map((video) => (
+              <div
+                key={video.id}
+                className="bg-white rounded-[24px] overflow-hidden border border-slate-100 shadow-sm hover:shadow-md transition-all group"
+              >
+                <div className="relative aspect-video">
+                  <img
+                    src={video.cover}
+                    alt={video.title}
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-black/20 group-hover:bg-black/30 transition-colors flex items-center justify-center">
+                    <div className="w-12 h-12 rounded-full bg-white/30 backdrop-blur-md flex items-center justify-center border border-white/40 shadow-xl group-hover:scale-110 transition-transform">
+                      <Play className="w-5 h-5 text-white fill-white ml-0.5" />
+                    </div>
+                  </div>
+                  <div className="absolute bottom-3 right-3 px-2 py-0.5 bg-black/60 backdrop-blur-md rounded-md text-[10px] font-bold text-white">
+                    {video.duration}
+                  </div>
+                  {video.isCompleted && (
+                    <div className="absolute top-3 right-3 px-2 py-0.5 bg-emerald-500 rounded-md text-[10px] font-bold text-white flex items-center gap-1 shadow-lg shadow-emerald-500/20">
+                      <CheckCircle2 className="w-3 h-3" /> 已学完
+                    </div>
+                  )}
+                </div>
+                <div className="p-4">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="px-2 py-0.5 bg-amber-50 text-amber-600 text-[10px] font-bold rounded-md border border-amber-100">
+                      {video.category}
+                    </span>
+                  </div>
+                  <h3 className="text-sm font-bold text-slate-900 leading-tight mb-2 group-hover:text-amber-600 transition-colors">
+                    {video.title}
+                  </h3>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3 text-[10px] text-slate-400">
+                    </div>
+                    <button className="text-[11px] font-black text-slate-900 flex items-center gap-1">
+                      立即学习 <ChevronRight className="w-3 h-3" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+        </div>
+      </div>
+    </motion.div>
+  );
+};
+
+const PractitionerCertificationPage = ({
+  onBack,
+  onStudyCenterClick,
+}: {
+  onBack: () => void;
+  onStudyCenterClick: () => void;
+}) => {
   const sections = [
     {
       id: "real-name",
@@ -10153,14 +10285,23 @@ const PractitionerCertificationPage = ({ onBack }: { onBack: () => void }) => {
       exit={{ opacity: 0, x: -20 }}
       className="fixed inset-0 z-[200] bg-slate-50 flex flex-col"
     >
-      <div className="sticky top-0 z-10 bg-white/80 backdrop-blur-md px-4 py-4 flex items-center gap-4 border-b border-slate-100">
+      <div className="sticky top-0 z-10 bg-white/80 backdrop-blur-md px-4 py-4 flex items-center justify-between border-b border-slate-100">
+        <div className="flex items-center gap-4">
+          <button
+            onClick={onBack}
+            className="p-1 hover:bg-slate-100 rounded-full transition-colors"
+          >
+            <ChevronLeft className="w-6 h-6 text-slate-800" />
+          </button>
+          <h1 className="text-lg font-bold text-slate-900">从业者认证</h1>
+        </div>
         <button
-          onClick={onBack}
-          className="p-1 hover:bg-slate-100 rounded-full transition-colors"
+          onClick={onStudyCenterClick}
+          className="px-3 py-1.5 bg-blue-50 text-blue-600 rounded-full text-xs font-black flex items-center gap-1 active:scale-95 transition-all shadow-sm border border-blue-100"
         >
-          <ChevronLeft className="w-6 h-6 text-slate-800" />
+          <GraduationCap className="w-3.5 h-3.5" />
+          学习中心
         </button>
-        <h1 className="text-lg font-bold text-slate-900">从业者认证</h1>
       </div>
 
       <div className="flex-1 overflow-y-auto p-6 space-y-6">
@@ -11916,7 +12057,13 @@ export default function App() {
           />
         )}
         {page === "practitioner-certification" && (
-          <PractitionerCertificationPage onBack={() => setPage("home")} />
+          <PractitionerCertificationPage
+            onBack={() => setPage("home")}
+            onStudyCenterClick={() => setPage("learning-center")}
+          />
+        )}
+        {page === "learning-center" && (
+          <LearningCenterPage onBack={() => setPage("practitioner-certification")} />
         )}
         {page === "combined-projects" && (
           <CombinedProjectPage
