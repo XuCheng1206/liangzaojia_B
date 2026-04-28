@@ -7659,6 +7659,12 @@ const ProfilePage = ({
                 bg: "bg-indigo-50",
               },
               {
+                icon: GraduationCap,
+                label: "学习中心",
+                color: "text-amber-500",
+                bg: "bg-amber-50",
+              },
+              {
                 icon: IdCard,
                 label: "我的名片",
                 color: "text-blue-500",
@@ -10320,13 +10326,60 @@ const PractitionerCertificationPage = ({
             <br />
             获取更多高端项目优先权
           </p>
-          <div className="mt-6 flex items-center gap-2">
-            <div className="h-[1px] w-8 bg-slate-200" />
-            <span className="text-[10px] font-bold text-slate-300 uppercase tracking-[0.2em]">
-              Certification System
-            </span>
-            <div className="h-[1px] w-8 bg-slate-200" />
+
+        </div>
+
+        {/* My Certified Roles Section */}
+        <div className="bg-white p-6 rounded-[32px] border border-slate-100 shadow-sm overflow-hidden relative">
+          <div className="absolute top-0 right-0 p-3">
+             <div className="w-12 h-12 rounded-full bg-blue-50/50 flex items-center justify-center">
+               <Award className="w-6 h-6 text-blue-400 opacity-20" />
+             </div>
           </div>
+          <div className="flex items-center gap-2 mb-4">
+            <div className="w-1.5 h-1.5 rounded-full bg-blue-500" />
+            <h3 className="text-sm font-black text-slate-900">我已认证角色</h3>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {[
+              { label: "工长", certified: true },
+              { label: "设计师", certified: true },
+              { label: "拆除工", certified: false },
+              { label: "水电工", certified: false },
+              { label: "木工", certified: false },
+              { label: "泥瓦工", certified: false },
+              { label: "油漆工", certified: false },
+            ].filter(role => role.certified).length > 0 ? (
+              [
+                { label: "工长", certified: true },
+                { label: "设计师", certified: true },
+                { label: "拆除工", certified: false },
+                { label: "水电工", certified: false },
+                { label: "木工", certified: false },
+                { label: "泥瓦工", certified: false },
+                { label: "油漆工", certified: false },
+              ]
+                .filter((role) => role.certified)
+                .map((role) => (
+                  <div
+                    key={role.label}
+                    className="px-4 py-2 rounded-xl text-[12px] font-bold bg-emerald-500 text-white shadow-md shadow-emerald-500/20 transition-all flex items-center gap-1.5"
+                  >
+                    <Check className="w-3 h-3 stroke-[4px]" />
+                    {role.label}
+                  </div>
+                ))
+            ) : (
+              <div className="w-full py-4 flex flex-col items-center justify-center bg-slate-50/50 rounded-2xl border border-dashed border-slate-200">
+                <ShieldAlert className="w-8 h-8 text-slate-200 mb-2" />
+                <p className="text-[12px] font-bold text-slate-400">您还未获得任何角色认证</p>
+                <p className="text-[10px] text-slate-300 mt-1">请前往下方“实名认证”开始入驻</p>
+              </div>
+            )}
+          </div>
+          <p className="mt-4 text-[10px] text-slate-400">
+            * 已认证角色将获得订单推荐和合同签约权
+          </p>
         </div>
 
         <div className="space-y-4">
@@ -10370,8 +10423,8 @@ const PractitionerCertificationPage = ({
             {[
               "专属认证标识，提升客户信任度",
               "高端大宅项目优先匹配权",
-              "平台官方流量扶持与推荐",
-              "加入精英从业者社群",
+              "平台官方扶持与推荐",
+              "项目合同的签约权",
             ].map((benefit, i) => (
               <li
                 key={i}
@@ -11856,6 +11909,12 @@ const LeadNotificationsPage = ({ onBack }: { onBack: () => void }) => {
 
 export default function App() {
   const [page, setPage] = useState<string>("home");
+  const [lastPage, setLastPage] = useState<string>("home");
+
+  const navigateTo = (newPage: string) => {
+    setLastPage(page);
+    setPage(newPage);
+  };
   const [selectedBannerIndex, setSelectedBannerIndex] = useState(0);
   const [detailSource, setDetailSource] = useState<
     "home" | "cases" | "lead-list"
@@ -11965,6 +12024,8 @@ export default function App() {
       setPage("my-archive");
     } else if (label === "我的名片") {
       setPage("my-business-card");
+    } else if (label === "学习中心") {
+      navigateTo("learning-center");
     } else if (label === "我的收藏") {
       setPage("my-favorites");
     } else if (label === "数字身份设置") {
@@ -12059,11 +12120,11 @@ export default function App() {
         {page === "practitioner-certification" && (
           <PractitionerCertificationPage
             onBack={() => setPage("home")}
-            onStudyCenterClick={() => setPage("learning-center")}
+            onStudyCenterClick={() => navigateTo("learning-center")}
           />
         )}
         {page === "learning-center" && (
-          <LearningCenterPage onBack={() => setPage("practitioner-certification")} />
+          <LearningCenterPage onBack={() => setPage(lastPage)} />
         )}
         {page === "combined-projects" && (
           <CombinedProjectPage
