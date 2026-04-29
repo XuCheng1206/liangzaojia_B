@@ -79,6 +79,9 @@ import {
   PenTool,
   HardHat,
   Globe,
+  Trash2,
+  Ruler,
+  Palette,
   History,
   Handshake,
   Check,
@@ -99,12 +102,10 @@ import {
   Cpu,
   Coins,
   Gift,
-  Palette,
   Settings,
   HelpCircle,
   LayoutDashboard,
   Edit3,
-  Trash2,
   Paperclip,
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
@@ -1426,7 +1427,7 @@ const ProjectRecruitmentPage = ({
   );
 };
 
-const HighEndDesignerDetailPage = ({ onBack }: { onBack: () => void }) => {
+const HighEndDesignerDetailPage = ({ onBack, onApply }: { onBack: () => void, onApply: () => void }) => {
   return (
     <motion.div
       initial={{ opacity: 0, x: 20 }}
@@ -1620,7 +1621,10 @@ const HighEndDesignerDetailPage = ({ onBack }: { onBack: () => void }) => {
 
       {/* Fixed Bottom Action */}
       <div className="sticky bottom-0 bg-white border-t border-gray-100 p-4 pb-safe">
-        <button className="w-full py-4 bg-gradient-to-r from-[#2C2C2C] to-[#1A1A1A] text-[#D4AF37] font-bold rounded-2xl shadow-xl shadow-black/10 active:scale-[0.98] transition-all border border-[#D4AF37]/30">
+        <button 
+          onClick={onApply}
+          className="w-full py-4 bg-gradient-to-r from-[#2C2C2C] to-[#1A1A1A] text-[#D4AF37] font-bold rounded-2xl shadow-xl shadow-black/10 active:scale-[0.98] transition-all border border-[#D4AF37]/30"
+        >
           申请加入严选设计师
         </button>
       </div>
@@ -2115,7 +2119,7 @@ const InitiatorRecruitmentPage = ({
   );
 };
 
-const HighEndForemanDetailPage = ({ onBack }: { onBack: () => void }) => {
+const HighEndForemanDetailPage = ({ onBack, onApply }: { onBack: () => void, onApply: () => void }) => {
   return (
     <motion.div
       initial={{ opacity: 0, x: 20 }}
@@ -2427,7 +2431,10 @@ const HighEndForemanDetailPage = ({ onBack }: { onBack: () => void }) => {
 
       {/* Fixed Bottom Action */}
       <div className="sticky bottom-0 bg-white border-t border-gray-100 p-4 pb-safe">
-        <button className="w-full py-4 bg-gradient-to-r from-[#2C2C2C] to-[#1A1A1A] text-[#D4AF37] font-bold rounded-2xl shadow-xl shadow-black/10 active:scale-[0.98] transition-all border border-[#D4AF37]/30">
+        <button 
+          onClick={onApply}
+          className="w-full py-4 bg-gradient-to-r from-[#2C2C2C] to-[#1A1A1A] text-[#D4AF37] font-bold rounded-2xl shadow-xl shadow-black/10 active:scale-[0.98] transition-all border border-[#D4AF37]/30"
+        >
           申请加入严选工长
         </button>
       </div>
@@ -2435,7 +2442,7 @@ const HighEndForemanDetailPage = ({ onBack }: { onBack: () => void }) => {
   );
 };
 
-const HighEndStudioDetailPage = ({ onBack }: { onBack: () => void }) => {
+const HighEndStudioDetailPage = ({ onBack, onApply }: { onBack: () => void, onApply: () => void }) => {
   return (
     <motion.div
       initial={{ opacity: 0, x: 20 }}
@@ -2665,7 +2672,10 @@ const HighEndStudioDetailPage = ({ onBack }: { onBack: () => void }) => {
 
       {/* Fixed Bottom Action */}
       <div className="sticky bottom-0 bg-white border-t border-gray-100 p-4 pb-safe">
-        <button className="w-full py-4 bg-gradient-to-r from-[#2C2C2C] to-[#1A1A1A] text-[#D4AF37] font-bold rounded-2xl shadow-xl shadow-black/10 active:scale-[0.98] transition-all border border-[#D4AF37]/30">
+        <button 
+          onClick={onApply}
+          className="w-full py-4 bg-gradient-to-r from-[#2C2C2C] to-[#1A1A1A] text-[#D4AF37] font-bold rounded-2xl shadow-xl shadow-black/10 active:scale-[0.98] transition-all border border-[#D4AF37]/30"
+        >
           申请加入严选设计工作室
         </button>
       </div>
@@ -6938,9 +6948,15 @@ const MyFavoritesPage = ({
 const MyBusinessCardPage = ({
   onBack,
   onNavigate,
+  orderStatus,
+  statusConfig,
+  onStatusClick,
 }: {
   onBack: () => void;
   onNavigate: (page: string) => void;
+  orderStatus: any;
+  statusConfig: any;
+  onStatusClick: () => void;
 }) => {
   return (
     <motion.div
@@ -6980,10 +6996,34 @@ const MyBusinessCardPage = ({
                   <h3 className="text-xl font-bold tracking-tight flex items-center gap-1.5">
                     沈子怡
                     <Shield className="w-4 h-4 text-blue-400" />
+                    <button 
+                      onClick={onStatusClick}
+                      className={cn(
+                        "flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[9px] font-bold border transition-all active:scale-95 ml-1 shadow-sm",
+                        statusConfig[orderStatus].bg,
+                        statusConfig[orderStatus].color,
+                        statusConfig[orderStatus].border
+                      )}
+                    >
+                      <div className={cn("w-1 h-1 rounded-full animate-pulse", statusConfig[orderStatus].dot)} />
+                      {statusConfig[orderStatus].label}
+                      <ChevronDown className="w-2.5 h-2.5 opacity-70" />
+                    </button>
                   </h3>
                   <p className="text-xs text-slate-300 mt-0.5">
                     资深全案设计师
                   </p>
+                  <div className="flex flex-wrap gap-x-2 gap-y-1 mt-2">
+                    <span className="text-[10px] text-slate-300 flex items-center gap-1">
+                      <User className="w-2.5 h-2.5" /> 女
+                    </span>
+                    <span className="text-[10px] text-slate-300 flex items-center gap-1">
+                      <MapPin className="w-2.5 h-2.5" /> 浙江·杭州
+                    </span>
+                    <span className="text-[10px] text-slate-300 flex items-center gap-1 truncate max-w-[120px]">
+                      <Home className="w-2.5 h-2.5" /> 滨江区江南大道123号
+                    </span>
+                  </div>
                 </div>
               </div>
               <div className="bg-white/10 backdrop-blur-sm px-2 py-1 rounded-lg border border-white/10 flex items-center gap-1">
@@ -6995,59 +7035,6 @@ const MyBusinessCardPage = ({
             </div>
 
             <div className="space-y-3">
-              {/* DID */}
-              <div className="bg-white/5 rounded-xl p-3 border border-white/10 backdrop-blur-sm">
-                <div className="text-[10px] text-slate-400 mb-1">
-                  数字身份标识 (DID)
-                </div>
-                <div className="font-mono text-sm tracking-wider text-blue-200 flex items-center justify-between">
-                  lzj:0x71C...9A2
-                  <QrCode className="w-4 h-4 text-slate-400" />
-                </div>
-              </div>
-
-              {/* 三度值 & 贡献值 */}
-              <div className="grid grid-cols-4 gap-2">
-                <div className="bg-white/5 rounded-xl p-2 text-center border border-white/10">
-                  <div className="text-sm font-bold text-emerald-400">98%</div>
-                  <div className="text-[9px] text-slate-400">信誉度</div>
-                </div>
-                <div className="bg-white/5 rounded-xl p-2 text-center border border-white/10">
-                  <div className="text-sm font-bold text-blue-400">95%</div>
-                  <div className="text-[9px] text-slate-400">美誉度</div>
-                </div>
-                <div className="bg-white/5 rounded-xl p-2 text-center border border-white/10">
-                  <div className="text-sm font-bold text-purple-400">88%</div>
-                  <div className="text-[9px] text-slate-400">知名度</div>
-                </div>
-                <div className="bg-gradient-to-br from-amber-500/20 to-orange-500/20 rounded-xl p-2 text-center border border-amber-500/30">
-                  <div className="text-sm font-bold text-amber-400">12.8w</div>
-                  <div className="text-[9px] text-amber-200/70">贡献值</div>
-                </div>
-              </div>
-
-              {/* 项目履约与服务 */}
-              <div className="bg-white/5 rounded-xl p-3 border border-white/10 backdrop-blur-sm">
-                <div className="text-[10px] text-slate-400 mb-2 flex items-center gap-1">
-                  <Target className="w-3 h-3" />
-                  项目履约与服务
-                </div>
-                <div className="grid grid-cols-3 gap-2">
-                  <div className="text-center">
-                    <div className="text-sm font-bold text-slate-200">96%</div>
-                    <div className="text-[9px] text-slate-400">一次验收</div>
-                  </div>
-                  <div className="text-center border-l border-white/10">
-                    <div className="text-sm font-bold text-slate-200">100%</div>
-                    <div className="text-[9px] text-slate-400">工期履约</div>
-                  </div>
-                  <div className="text-center border-l border-white/10">
-                    <div className="text-sm font-bold text-slate-200">4.9</div>
-                    <div className="text-[9px] text-slate-400">服务评分</div>
-                  </div>
-                </div>
-              </div>
-
               {/* 培训考核 */}
               <div className="bg-white/5 rounded-xl p-3 border border-white/10 backdrop-blur-sm">
                 <div className="text-[10px] text-slate-400 mb-2 flex items-center gap-1">
@@ -7062,6 +7049,10 @@ const MyBusinessCardPage = ({
                   <div className="flex items-center gap-1 text-[10px] bg-emerald-500/20 border border-emerald-500/30 px-2 py-1 rounded-md text-emerald-200">
                     <Heart className="w-3 h-3 text-emerald-400" />
                     良知素养 98分
+                  </div>
+                  <div className="flex items-center gap-1 text-[10px] bg-blue-600/30 border border-blue-500/40 px-2 py-1 rounded-md text-blue-100">
+                    <ShieldCheck className="w-3 h-3 text-blue-400" />
+                    意外险 已投保
                   </div>
                   <div className="flex items-center gap-1 text-[10px] bg-blue-500/20 border border-blue-500/30 px-2 py-1 rounded-md text-blue-200">
                     <GraduationCap className="w-3 h-3 text-blue-400" />
@@ -7104,7 +7095,17 @@ const MyBusinessCardPage = ({
   );
 };
 
-const MyArchivePage = ({ onBack }: { onBack: () => void }) => {
+const MyArchivePage = ({ 
+  onBack,
+  orderStatus,
+  statusConfig,
+  onStatusClick,
+}: { 
+  onBack: () => void;
+  orderStatus: any;
+  statusConfig: any;
+  onStatusClick: () => void;
+}) => {
   const [showShareModal, setShowShareModal] = useState(false);
 
   return (
@@ -7153,9 +7154,24 @@ const MyArchivePage = ({ onBack }: { onBack: () => void }) => {
 
             <div className="flex-1 pt-1">
               <div className="flex items-center justify-between mb-1">
-                <h2 className="text-xl font-black text-gray-900 tracking-tight">
-                  沈子怡
-                </h2>
+                <div className="flex items-center gap-2">
+                  <h2 className="text-xl font-black text-gray-900 tracking-tight">
+                    沈子怡
+                  </h2>
+                  <button 
+                    onClick={onStatusClick}
+                    className={cn(
+                      "flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold border transition-all active:scale-95 shadow-sm",
+                      statusConfig[orderStatus].bg,
+                      statusConfig[orderStatus].color,
+                      statusConfig[orderStatus].border
+                    )}
+                  >
+                    <div className={cn("w-1.5 h-1.5 rounded-full animate-pulse", statusConfig[orderStatus].dot)} />
+                    {statusConfig[orderStatus].label}
+                    <ChevronDown className="w-3 h-3 opacity-70" />
+                  </button>
+                </div>
                 <div className="flex items-center gap-1 bg-amber-50 text-amber-600 px-2 py-1 rounded-md border border-amber-100">
                   <Medal className="w-3 h-3" />
                   <span className="text-[10px] font-bold">金牌服务</span>
@@ -7165,6 +7181,18 @@ const MyArchivePage = ({ onBack }: { onBack: () => void }) => {
               <p className="text-sm font-medium text-gray-600 mb-2">
                 资深全案设计师 · 从业8年
               </p>
+
+              <div className="flex flex-wrap gap-x-3 gap-y-1 mb-2">
+                <span className="text-[11px] text-gray-500 flex items-center gap-1">
+                  <User className="w-3 h-3" /> 女
+                </span>
+                <span className="text-[11px] text-gray-500 flex items-center gap-1">
+                  <MapPin className="w-3 h-3" /> 浙江·杭州
+                </span>
+                <span className="text-[11px] text-gray-500 flex items-center gap-1 truncate max-w-[150px]">
+                  <Home className="w-3 h-3" /> 滨江区江南大道123号
+                </span>
+              </div>
 
               <div className="flex flex-wrap gap-1.5">
                 <span className="px-2 py-0.5 bg-blue-50 text-blue-600 text-[10px] font-medium rounded-md border border-blue-100">
@@ -7236,23 +7264,6 @@ const MyArchivePage = ({ onBack }: { onBack: () => void }) => {
           </div>
         </div>
 
-        {/* 贡献值 */}
-        <div className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl p-5 shadow-sm border border-amber-100">
-          <h3 className="text-sm font-bold text-amber-900 mb-2 flex items-center gap-2">
-            <Award className="w-4 h-4 text-amber-600" />
-            贡献值 (累计收入)
-          </h3>
-          <div className="flex items-baseline gap-1">
-            <span className="text-2xl font-bold text-amber-600">¥</span>
-            <span className="text-4xl font-black text-amber-600 tracking-tight">
-              128,500
-            </span>
-          </div>
-          <p className="text-xs text-amber-700/80 mt-2">
-            通过平台项目与合作获得的累计收益
-          </p>
-        </div>
-
         {/* 项目履约与服务 */}
         <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
           <h3 className="text-sm font-bold text-gray-900 mb-4 flex items-center gap-2">
@@ -7280,6 +7291,148 @@ const MyArchivePage = ({ onBack }: { onBack: () => void }) => {
               <span className="text-[10px] text-gray-500 mt-0.5">
                 服务态度评分
               </span>
+            </div>
+          </div>
+        </div>
+
+        {/* 综合评价与真实评语 */}
+        <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-sm font-bold text-gray-900 flex items-center gap-2">
+              <MessageCircle className="w-4 h-4 text-indigo-500" />
+              客户评价
+            </h3>
+            <div className="flex items-center gap-1">
+              <span className="text-sm font-bold text-gray-900">4.9</span>
+              <div className="flex">
+                {[1, 2, 3, 4, 5].map((s) => (
+                  <Star
+                    key={s}
+                    className={cn(
+                      "w-3 h-3",
+                      s <= 4 ? "text-amber-400 fill-amber-400" : "text-gray-200",
+                    )}
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+          <div className="space-y-3">
+            {[
+              {
+                user: "王先生",
+                date: "2024.03.12",
+                rating: 5,
+                comment: "沈老师非常专业，从方案设计到后期落地全程贴心跟进，细节控必备！",
+                projectName: "杭州·中海御道二期",
+                taskName: "硬装全案设计",
+                city: "杭州",
+              },
+              {
+                user: "李女士",
+                date: "2023.12.05",
+                rating: 4,
+                comment: "审美在线，沟通非常顺畅，能理解我们的每一个需求，推荐！",
+                projectName: "上海·汤臣一品",
+                taskName: "软装设计搭配",
+                city: "上海",
+              },
+            ].map((review, i) => (
+              <div key={i} className="bg-gray-50 rounded-xl p-3 border border-gray-100">
+                <div className="flex items-center justify-between mb-1.5">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-bold text-gray-800">{review.user}</span>
+                    <span className="text-[9px] px-1 bg-gray-200 text-gray-500 rounded">{review.city}</span>
+                  </div>
+                  <span className="text-[10px] text-gray-400">{review.date}</span>
+                </div>
+                <div className="flex items-center gap-2 text-[9px] text-indigo-500 font-medium mb-1.5">
+                  <div className="flex items-center gap-0.5">
+                    <Home className="w-2.5 h-2.5" />
+                    {review.projectName}
+                  </div>
+                  <div className="w-1 h-1 bg-gray-300 rounded-full" />
+                  <div>{review.taskName}</div>
+                </div>
+                <p className="text-[11px] text-gray-600 leading-relaxed font-medium">“{review.comment}”</p>
+              </div>
+            ))}
+            <button className="w-full py-2.5 border border-dashed border-indigo-200 rounded-xl text-[11px] font-bold text-indigo-500 hover:bg-indigo-50 transition-colors flex items-center justify-center gap-1 mt-2">
+              查看更多评价 (24)
+              <ChevronRight className="w-3 h-3" />
+            </button>
+          </div>
+        </div>
+
+        {/* 项目案例 */}
+        <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
+          <h3 className="text-sm font-bold text-gray-900 mb-4 flex items-center gap-2">
+            <Layers className="w-4 h-4 text-emerald-500" />
+            项目案例
+          </h3>
+          <div className="grid grid-cols-2 gap-3">
+            {[
+              {
+                title: "江南壹号院 · 极简美学",
+                image: "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&q=80&w=400",
+                type: "全案设计",
+              },
+              {
+                title: "武林壹号 · 现代轻奢",
+                image: "https://images.unsplash.com/photo-1600607687940-4e2a09695d51?auto=format&fit=crop&q=80&w=400",
+                type: "软装设计",
+              },
+            ].map((project, i) => (
+              <div key={i} className="group cursor-pointer">
+                <div className="aspect-[4/3] rounded-xl overflow-hidden mb-2 relative">
+                  <img src={project.image} alt={project.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                  <div className="absolute top-2 left-2 px-1.5 py-0.5 bg-black/50 backdrop-blur-md rounded text-[9px] text-white">
+                    {project.type}
+                  </div>
+                </div>
+                <h4 className="text-[11px] font-bold text-gray-900 leading-snug line-clamp-2">{project.title}</h4>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* 综合认证信息 */}
+        <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
+          <h3 className="text-sm font-bold text-gray-900 mb-4 flex items-center gap-2">
+            <ShieldCheck className="w-4 h-4 text-blue-500" />
+            认证与资质
+          </h3>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="bg-blue-50/50 p-3 rounded-xl border border-blue-100/50 flex flex-col gap-1.5">
+              <span className="text-[10px] font-bold text-blue-700 flex items-center gap-1">
+                <Search className="w-3 h-3" /> 背景调查
+              </span>
+              <span className="text-[12px] font-black text-blue-800">通过</span>
+              <span className="text-[9px] text-blue-500/80">已核实无犯罪记录</span>
+            </div>
+            <div className="bg-emerald-50/50 p-3 rounded-xl border border-emerald-100/50 flex flex-col gap-1.5">
+              <span className="text-[10px] font-bold text-emerald-700 flex items-center gap-1">
+                <ShieldCheck className="w-3 h-3" /> 意外险
+              </span>
+              <span className="text-[12px] font-black text-emerald-800">已投保</span>
+              <span className="text-[9px] text-emerald-500/80">有效期至 2025.01</span>
+            </div>
+            <div className="col-span-2 bg-gray-50 p-3 rounded-xl border border-gray-100">
+              <span className="text-[10px] font-bold text-gray-700 flex items-center gap-1 mb-2">
+                <Camera className="w-3 h-3" /> 实地考察记录
+              </span>
+              <div className="flex gap-2">
+                <div className="w-16 h-12 rounded-lg bg-gray-200 overflow-hidden">
+                   <img src="https://images.unsplash.com/photo-1541123437800-1bb1317badc2?auto=format&fit=crop&q=80&w=200" className="w-full h-full object-cover" />
+                </div>
+                <div className="w-16 h-12 rounded-lg bg-gray-200 overflow-hidden">
+                   <img src="https://images.unsplash.com/photo-1541123223191-2292f7411692?auto=format&fit=crop&q=80&w=200" className="w-full h-full object-cover" />
+                </div>
+                <div className="flex-1 flex flex-col justify-center">
+                  <span className="text-[10px] font-bold text-gray-800">考察人员: 王明</span>
+                  <span className="text-[9px] text-gray-500">2024.01.20 考察通过</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -7560,8 +7713,14 @@ const DigitalIdentitySettingsPage = ({
 
 const ProfilePage = ({
   onMenuClick,
+  orderStatus,
+  statusConfig,
+  onStatusClick,
 }: {
   onMenuClick: (label: string) => void;
+  orderStatus: any;
+  statusConfig: any;
+  onStatusClick: () => void;
 }) => {
   return (
     <div className="min-h-screen bg-gray-50/50 pb-32">
@@ -7615,9 +7774,24 @@ const ProfilePage = ({
 
                 {/* Info Area */}
                 <div className="flex flex-col items-start min-w-0 flex-1">
-                  <h2 className="text-[18px] font-black text-gray-900 truncate tracking-tight mb-0.5">
-                    沈子怡
-                  </h2>
+                  <div className="flex items-center gap-2 mb-0.5">
+                    <h2 className="text-[18px] font-black text-gray-900 truncate tracking-tight">
+                      沈子怡
+                    </h2>
+                    <button 
+                      onClick={onStatusClick}
+                      className={cn(
+                        "flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[9px] font-bold border shadow-sm transition-all active:scale-95",
+                        statusConfig[orderStatus].bg,
+                        statusConfig[orderStatus].color,
+                        statusConfig[orderStatus].border
+                      )}
+                    >
+                      <div className={cn("w-1 h-1 rounded-full animate-pulse", statusConfig[orderStatus].dot)} />
+                      {statusConfig[orderStatus].label}
+                      <ChevronDown className="w-2.5 h-2.5 opacity-70" />
+                    </button>
+                  </div>
                   <p className="text-[12px] text-gray-500 font-medium mb-1.5">
                     高级大宅设计师
                   </p>
@@ -10250,12 +10424,832 @@ const LearningCenterPage = ({ onBack }: { onBack: () => void }) => {
   );
 };
 
+const DesignerCertificationForm = ({ onBack, onSubmit }: { onBack: () => void, onSubmit: (data: any) => void }) => {
+  const [formData, setFormData] = useState({
+    name: "", gender: "男", age: "", idNumber: "", education: "",
+    graduatedFrom: "", major: "", certificates: "",
+    hobbies: "", phone: "13588990011", nativePlace: "", residence: "",
+    smartphoneProficiency: true, emergencyPhone: "",
+    yearsOfExperience: "", casesCount: "", projectCount: "", projectAddress: "",
+    successfulCases: "",
+    entityType: "无", designFeeMin: "", designFeeMax: "",
+    assistantsCount: "", ownerEvaluation: "", selfEvaluation: "", honors: ""
+  });
+
+  const [errors, setErrors] = useState<string[]>([]);
+  const [experiences, setExperiences] = useState([{ time: "", company: "", position: "" }]);
+  const [softwares, setSoftwares] = useState<string[]>([]);
+  const [propertyTypes, setPropertyTypes] = useState<string[]>([]);
+  const [scaleTypes, setScaleTypes] = useState<string[]>([]);
+  const [styles, setStyles] = useState<string[]>([]);
+  const [designTypes, setDesignTypes] = useState<string[]>([]);
+  const [hasRenderTeam, setHasRenderTeam] = useState(false);
+  const [hasDeepenTeam, setHasDeepenTeam] = useState(false);
+
+  const validate = () => {
+    const newErrors: string[] = [];
+    const required = [
+      'name', 'age', 'idNumber', 'education', 'phone', 'nativePlace', 'residence',
+      'yearsOfExperience', 'casesCount', 'projectCount', 'successfulCases',
+      'ownerEvaluation', 'selfEvaluation'
+    ];
+    required.forEach(f => {
+      if (!formData[f as keyof typeof formData]?.toString().trim()) newErrors.push(f);
+    });
+    if (softwares.length === 0) newErrors.push('softwares');
+    if (propertyTypes.length === 0) newErrors.push('propertyTypes');
+    if (styles.length === 0) newErrors.push('styles');
+    
+    setErrors(newErrors);
+    if (newErrors.length > 0) {
+      alert("请填写完整带标记的必填信息");
+      const first = newErrors[0];
+      const el = document.getElementById(`err-${first}`);
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    return newErrors.length === 0;
+  };
+
+  const handleSubmit = () => {
+    if (validate()) {
+      alert("提交成功！工作人员会在24小时内联系你，请耐心等待。");
+      onSubmit({ ...formData, experiences, softwares, propertyTypes, scaleTypes, styles, designTypes, hasRenderTeam, hasDeepenTeam });
+    }
+  };
+
+  const toggle = (list: string[], set: (l: string[]) => void, item: string) => {
+    set(list.includes(item) ? list.filter(i => i !== item) : [...list, item]);
+  };
+
+  return (
+    <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="fixed inset-0 z-[300] bg-white flex flex-col">
+      <div className="sticky top-0 z-10 bg-white px-4 py-4 flex items-center justify-between border-b border-slate-100">
+        <div className="flex items-center gap-4">
+          <button onClick={onBack} className="p-1 hover:bg-slate-100 rounded-full transition-colors font-bold">
+            <ChevronLeft className="w-6 h-6 text-slate-800" />
+          </button>
+          <h1 className="text-lg font-bold text-slate-900">设计师信息登记</h1>
+        </div>
+      </div>
+
+      <div className="flex-1 overflow-y-auto pb-32">
+        <div className="p-6 space-y-8">
+          {/* Section 1: Basic */}
+          <div className="space-y-4">
+            <div className="flex items-center gap-2 mb-4">
+              <div className="w-1.5 h-6 bg-blue-600 rounded-full" />
+              <h2 className="text-base font-black text-slate-900">一、基本信息</h2>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-1">
+                <label className="text-[10px] font-bold text-slate-400 ml-1">姓名</label>
+                <input id="err-name" type="text" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className={cn("w-full px-4 py-2.5 bg-slate-50 border rounded-xl text-sm transition-all", errors.includes('name') ? "border-red-500 bg-red-50" : "border-slate-100 font-bold")} placeholder="请输入" />
+              </div>
+              <div className="space-y-1">
+                <label className="text-[10px] font-bold text-slate-400 ml-1">性别</label>
+                <select value={formData.gender} onChange={e => setFormData({...formData, gender: e.target.value})} className="w-full px-4 py-2.5 bg-slate-50 border border-slate-100 rounded-xl text-sm font-bold">
+                  <option>男</option>
+                  <option>女</option>
+                </select>
+              </div>
+              <div className="space-y-1">
+                <label className="text-[10px] font-bold text-slate-400 ml-1">年龄</label>
+                <input id="err-age" type="number" value={formData.age} onChange={e => setFormData({...formData, age: e.target.value})} className={cn("w-full px-4 py-2.5 bg-slate-50 border rounded-xl text-sm transition-all", errors.includes('age') ? "border-red-500 bg-red-50" : "border-slate-100 font-bold")} />
+              </div>
+              <div className="space-y-1">
+                <label className="text-[10px] font-bold text-slate-400 ml-1">学历</label>
+                <input id="err-education" type="text" value={formData.education} onChange={e => setFormData({...formData, education: e.target.value})} className={cn("w-full px-4 py-2.5 bg-slate-50 border rounded-xl text-sm transition-all", errors.includes('education') ? "border-red-500 bg-red-50" : "border-slate-100")} />
+              </div>
+            </div>
+            <div className="space-y-1">
+              <label className="text-[10px] font-bold text-slate-400 ml-1">身份证号码</label>
+              <input id="err-idNumber" type="text" value={formData.idNumber} onChange={e => setFormData({...formData, idNumber: e.target.value})} className={cn("w-full px-4 py-2.5 bg-slate-50 border rounded-xl text-sm font-mono transition-all", errors.includes('idNumber') ? "border-red-500 bg-red-50" : "border-slate-100")} placeholder="18位身份证号" />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-1">
+                <label className="text-[10px] font-bold text-slate-400 ml-1">毕业院校</label>
+                <input type="text" value={formData.graduatedFrom} onChange={e => setFormData({...formData, graduatedFrom: e.target.value})} className="w-full px-4 py-2.5 bg-slate-50 border border-slate-100 rounded-xl text-sm" />
+              </div>
+              <div className="space-y-1">
+                <label className="text-[10px] font-bold text-slate-400 ml-1">专业</label>
+                <input type="text" value={formData.major} onChange={e => setFormData({...formData, major: e.target.value})} className="w-full px-4 py-2.5 bg-slate-50 border border-slate-100 rounded-xl text-sm" />
+              </div>
+            </div>
+            <div className="space-y-1">
+              <label className="text-[10px] font-bold text-slate-400 ml-1">持有证书</label>
+              <input type="text" value={formData.certificates} onChange={e => setFormData({...formData, certificates: e.target.value})} className="w-full px-4 py-2.5 bg-slate-50 border border-slate-100 rounded-xl text-sm" placeholder="如：高级室内设计师等" />
+            </div>
+            <div id="err-softwares" className={cn("space-y-2 p-3 rounded-2xl transition-all", errors.includes('softwares') ? "bg-red-50 border border-red-100" : "bg-slate-50")}>
+              <label className="text-xs font-bold text-slate-700 ml-1">熟练设计软件</label>
+              <div className="flex flex-wrap gap-2">
+                {["CAD", "酷家乐", "3DMAX", "SU", "PS"].map(s => (
+                  <button key={s} onClick={() => toggle(softwares, setSoftwares, s)} className={cn("px-3 py-1.5 rounded-full text-[11px] font-bold border transition-all", softwares.includes(s) ? "bg-blue-600 border-blue-600 text-white" : "bg-white border-slate-100 text-slate-500")}>{s}</button>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Section 2: Experience */}
+          <div className="space-y-4">
+            <div className="flex items-center gap-2 mb-4">
+              <div className="w-1.5 h-6 bg-blue-600 rounded-full" />
+              <h2 className="text-base font-black text-slate-900">二、履历信息</h2>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-1">
+                <label className="text-[10px] font-bold text-slate-400 ml-1">从业年限 (年)</label>
+                <input id="err-yearsOfExperience" type="number" value={formData.yearsOfExperience} onChange={e => setFormData({...formData, yearsOfExperience: e.target.value})} className={cn("w-full px-4 py-2.5 bg-slate-50 border rounded-xl text-sm font-bold", errors.includes('yearsOfExperience') ? "border-red-500" : "border-slate-100")} />
+              </div>
+              <div className="space-y-1">
+                <label className="text-[10px] font-bold text-slate-400 ml-1">提供实景案例 (套)</label>
+                <input id="err-casesCount" type="number" value={formData.casesCount} onChange={e => setFormData({...formData, casesCount: e.target.value})} className={cn("w-full px-4 py-2.5 bg-slate-50 border rounded-xl text-sm font-bold", errors.includes('casesCount') ? "border-red-500" : "border-slate-100")} />
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              <div className="flex items-center justify-between mb-1">
+                <label className="text-xs font-bold text-slate-700 ml-1">从业经历</label>
+                <button onClick={() => setExperiences([...experiences, { time: "", company: "", position: "" }])} className="text-[10px] font-bold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-lg">+ 新增记录</button>
+              </div>
+              <div className="space-y-3">
+                {experiences.map((exp, index) => (
+                  <div key={index} className="bg-slate-50 p-4 rounded-2xl space-y-3 relative group">
+                    {experiences.length > 1 && (
+                      <button onClick={() => setExperiences(experiences.filter((_, i) => i !== index))} className="absolute top-2 right-2 text-slate-300 hover:text-red-400 transition-colors">
+                        <XCircle className="w-4 h-4" />
+                      </button>
+                    )}
+                    <div className="space-y-1">
+                      <label className="text-[10px] font-bold text-slate-400">时间段 (如: 2018.01-2022.12)</label>
+                      <input type="text" value={exp.time} onChange={e => {
+                        const newExp = [...experiences];
+                        newExp[index].time = e.target.value;
+                        setExperiences(newExp);
+                      }} className="w-full px-3 py-2 bg-white border border-slate-100 rounded-lg text-xs" placeholder="请填写起止日期" />
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="space-y-1">
+                        <label className="text-[10px] font-bold text-slate-400">公司名称</label>
+                        <input type="text" value={exp.company} onChange={e => {
+                          const newExp = [...experiences];
+                          newExp[index].company = e.target.value;
+                          setExperiences(newExp);
+                        }} className="w-full px-3 py-2 bg-white border border-slate-100 rounded-lg text-xs" />
+                      </div>
+                      <div className="space-y-1">
+                        <label className="text-[10px] font-bold text-slate-400">岗位/职位</label>
+                        <input type="text" value={exp.position} onChange={e => {
+                          const newExp = [...experiences];
+                          newExp[index].position = e.target.value;
+                          setExperiences(newExp);
+                        }} className="w-full px-3 py-2 bg-white border border-slate-100 rounded-lg text-xs" />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-xs font-bold text-slate-700 ml-1">在建/可参观项目</label>
+              <div className="bg-slate-50 p-4 rounded-2xl space-y-3">
+                <div className="flex items-center gap-2">
+                  <span className="text-xs text-slate-500 font-bold whitespace-nowrap">在建数量</span>
+                  <div className="flex-1 flex items-center gap-2 bg-white px-3 py-2 rounded-xl border border-slate-100">
+                    <input id="err-projectCount" type="number" placeholder="0" value={formData.projectCount} onChange={e => setFormData({...formData, projectCount: e.target.value})} className="w-full text-sm outline-none font-bold" />
+                    <span className="text-xs text-slate-400">个</span>
+                  </div>
+                </div>
+                <div className="space-y-1">
+                  <label className="text-[10px] font-bold text-slate-400">具体展示地址</label>
+                  <textarea value={formData.projectAddress} onChange={e => setFormData({...formData, projectAddress: e.target.value})} className="w-full px-3 py-2 bg-white border border-slate-100 rounded-xl text-xs min-h-[60px] outline-none" placeholder="请填写项目的具体详细地址..." />
+                </div>
+              </div>
+            </div>
+
+            <div id="err-propertyTypes" className={cn("space-y-2 p-3 rounded-2xl transition-all", errors.includes('propertyTypes') ? "bg-red-50 border border-red-100" : "bg-slate-50")}>
+              <label className="text-xs font-bold text-slate-700 ml-1">擅长设计户型</label>
+              <div className="flex flex-wrap gap-2">
+                {["别墅", "复式", "平层", "公装"].map(t => (
+                  <button key={t} onClick={() => toggle(propertyTypes, setPropertyTypes, t)} className={cn("px-4 py-2 rounded-xl text-[11px] font-bold border transition-all", propertyTypes.includes(t) ? "bg-slate-900 border-slate-900 text-white" : "bg-white border-slate-100 text-slate-500")}>{t}</button>
+                ))}
+              </div>
+            </div>
+
+            <div id="err-styles" className={cn("space-y-2 p-3 rounded-2xl transition-all", errors.includes('styles') ? "bg-red-50 border border-red-100" : "bg-slate-50")}>
+              <label className="text-xs font-bold text-slate-700 ml-1">擅长设计风格</label>
+              <div className="flex flex-wrap gap-2">
+                {["中式", "现代", "欧式", "法式", "工业", "日式"].map(s => (
+                  <button key={s} onClick={() => toggle(styles, setStyles, s)} className={cn("px-4 py-2 rounded-xl text-[11px] font-bold border transition-all", styles.includes(s) ? "bg-slate-900 border-slate-900 text-white" : "bg-white border-slate-100 text-slate-500")}>{s}</button>
+                ))}
+              </div>
+            </div>
+
+            <div className="space-y-1">
+              <label className="text-[10px] font-bold text-slate-400 ml-1">成功项目案例描述</label>
+              <textarea id="err-successfulCases" value={formData.successfulCases} onChange={e => setFormData({...formData, successfulCases: e.target.value})} className={cn("w-full px-4 py-3 bg-slate-50 border rounded-2xl text-sm min-h-[120px] transition-all", errors.includes('successfulCases') ? "border-red-500 bg-red-50" : "border-slate-100")} placeholder="请描述您的代表项目..." />
+            </div>
+          </div>
+
+          {/* Section 3: Team */}
+          <div className="space-y-4">
+            <div className="flex items-center gap-2 mb-4">
+              <div className="w-1.5 h-6 bg-blue-600 rounded-full" />
+              <h2 className="text-base font-black text-slate-900">三、团队与价格</h2>
+            </div>
+            <div className="bg-slate-50 p-5 rounded-[24px] space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-1">
+                  <label className="text-[10px] font-bold text-slate-400 ml-1">设计费最低 (元/m²)</label>
+                  <input type="number" value={formData.designFeeMin} onChange={e => setFormData({...formData, designFeeMin: e.target.value})} className="w-full px-4 py-2.5 bg-white border border-slate-100 rounded-xl text-sm font-bold" />
+                </div>
+                <div className="space-y-1">
+                  <label className="text-[10px] font-bold text-slate-400 ml-1">设计费最高 (元/m²)</label>
+                  <input type="number" value={formData.designFeeMax} onChange={e => setFormData({...formData, designFeeMax: e.target.value})} className="w-full px-4 py-2.5 bg-white border border-slate-100 rounded-xl text-sm font-bold" />
+                </div>
+              </div>
+              <div className="flex gap-4">
+                <button onClick={() => setHasRenderTeam(!hasRenderTeam)} className={cn("flex-1 py-3 rounded-xl border text-xs font-bold transition-all", hasRenderTeam ? "bg-slate-900 border-slate-900 text-white" : "bg-white border-slate-100 text-slate-500 shadow-sm")}>效果图制作团队 {hasRenderTeam ? "✓" : "+"}</button>
+                <button onClick={() => setHasDeepenTeam(!hasDeepenTeam)} className={cn("flex-1 py-3 rounded-xl border text-xs font-bold transition-all", hasDeepenTeam ? "bg-slate-900 border-slate-900 text-white" : "bg-white border-slate-100 text-slate-500 shadow-sm")}>深化图团队 {hasDeepenTeam ? "✓" : "+"}</button>
+              </div>
+            </div>
+          </div>
+
+          {/* Section 4: Eval */}
+          <div className="space-y-4">
+            <div className="flex items-center gap-2 mb-4">
+              <div className="w-1.5 h-6 bg-blue-600 rounded-full" />
+              <h2 className="text-base font-black text-slate-900">四、评价与荣誉</h2>
+            </div>
+            <textarea id="err-ownerEvaluation" value={formData.ownerEvaluation} onChange={e => setFormData({...formData, ownerEvaluation: e.target.value})} className={cn("w-full px-4 py-3 bg-slate-50 border rounded-2xl text-sm min-h-[100px]", errors.includes('ownerEvaluation') ? "border-red-500 bg-red-50" : "border-slate-100")} placeholder="过往业主评价..." />
+            <textarea id="err-selfEvaluation" value={formData.selfEvaluation} onChange={e => setFormData({...formData, selfEvaluation: e.target.value})} className={cn("w-full px-4 py-3 bg-slate-50 border rounded-2xl text-sm min-h-[100px]", errors.includes('selfEvaluation') ? "border-red-500 bg-red-50" : "border-slate-100")} placeholder="自我客观评价 (性格/做事)..." />
+            <textarea value={formData.honors} onChange={e => setFormData({...formData, honors: e.target.value})} className="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-2xl text-sm min-h-[100px]" placeholder="所获荣誉..." />
+          </div>
+        </div>
+      </div>
+
+      <div className="fixed bottom-0 left-0 right-0 p-6 bg-white border-t border-slate-100 backdrop-blur-md bg-white/90 z-20">
+        <button onClick={handleSubmit} className="w-full py-4 bg-blue-600 text-white font-black rounded-2xl shadow-xl active:scale-[0.98] transition-all">
+          提交认证申请
+        </button>
+      </div>
+    </motion.div>
+  );
+};
+
+const WorkerCertificationForm = ({ role, onBack, onSubmit }: { role: string, onBack: () => void, onSubmit: (data: any) => void }) => {
+  const [formData, setFormData] = useState({
+    name: "", gender: "男", age: "", idNumber: "", education: "",
+    hobbies: "", phone: "13588990011", nativePlace: "", residence: "",
+    smartphoneProficiency: true, emergencyPhone: "",
+    yearsOfExperience: "",
+  });
+
+  const [errors, setErrors] = useState<string[]>([]);
+
+  const validate = () => {
+    const newErrors: string[] = [];
+    const required = [
+      'name', 'age', 'idNumber', 'education', 'phone', 'nativePlace', 'residence',
+      'emergencyPhone', 'yearsOfExperience'
+    ];
+    required.forEach(f => {
+      if (!formData[f as keyof typeof formData]?.toString().trim()) newErrors.push(f);
+    });
+    
+    setErrors(newErrors);
+    if (newErrors.length > 0) {
+      alert("请填写完整带标记的必填信息");
+      const first = newErrors[0];
+      const el = document.getElementById(`err-${first}`);
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    return newErrors.length === 0;
+  };
+
+  const handleSubmit = () => {
+    if (validate()) {
+      alert(`${role}信息登记成功！`);
+      onSubmit({ ...formData, role });
+    }
+  };
+
+  return (
+    <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="fixed inset-0 z-[300] bg-white flex flex-col">
+      <div className="sticky top-0 z-10 bg-white px-4 py-4 flex items-center justify-between border-b border-slate-100">
+        <div className="flex items-center gap-4">
+          <button onClick={onBack} className="p-1 hover:bg-slate-100 rounded-full transition-colors font-bold">
+            <ChevronLeft className="w-6 h-6 text-slate-800" />
+          </button>
+          <h1 className="text-lg font-bold text-slate-900">{role}信息登记表</h1>
+        </div>
+      </div>
+
+      <div className="flex-1 overflow-y-auto pb-32">
+        <div className="p-6 space-y-8">
+          {/* Section 1: Basic Information - Structured like the image */}
+          <div className="space-y-6">
+            <div className="grid grid-cols-6 gap-4">
+              <div className="col-span-2 space-y-1">
+                <label className="text-[10px] font-bold text-slate-400 ml-1">姓名</label>
+                <input id="err-name" type="text" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className={cn("w-full px-3 py-2 bg-slate-50 border rounded-xl text-xs transition-all", errors.includes('name') ? "border-red-500 bg-red-50" : "border-slate-100 font-bold")} placeholder="姓名" />
+              </div>
+              <div className="col-span-2 space-y-1">
+                <label className="text-[10px] font-bold text-slate-400 ml-1">性别</label>
+                <select value={formData.gender} onChange={e => setFormData({...formData, gender: e.target.value})} className="w-full px-3 py-2 bg-slate-50 border border-slate-100 rounded-xl text-xs font-bold">
+                  <option>男</option>
+                  <option>女</option>
+                </select>
+              </div>
+              <div className="col-span-2 space-y-1">
+                <label className="text-[10px] font-bold text-slate-400 ml-1">年龄</label>
+                <input id="err-age" type="number" value={formData.age} onChange={e => setFormData({...formData, age: e.target.value})} className={cn("w-full px-3 py-2 bg-slate-50 border rounded-xl text-xs transition-all", errors.includes('age') ? "border-red-500 bg-red-50" : "border-slate-100 font-bold")} placeholder="年龄" />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-6 gap-4">
+              <div className="col-span-4 space-y-1">
+                <label className="text-[10px] font-bold text-slate-400 ml-1">身份证号码</label>
+                <input id="err-idNumber" type="text" value={formData.idNumber} onChange={e => setFormData({...formData, idNumber: e.target.value})} className={cn("w-full px-3 py-2 bg-slate-50 border rounded-xl text-xs font-mono tracking-wider transition-all", errors.includes('idNumber') ? "border-red-500 bg-red-50" : "border-slate-100")} placeholder="请输入18位身份证号" />
+              </div>
+              <div className="col-span-2 space-y-1">
+                <label className="text-[10px] font-bold text-slate-400 ml-1">学历</label>
+                <input id="err-education" type="text" value={formData.education} onChange={e => setFormData({...formData, education: e.target.value})} className={cn("w-full px-3 py-2 bg-slate-50 border rounded-xl text-xs transition-all", errors.includes('education') ? "border-red-500 bg-red-50" : "border-slate-100")} placeholder="学历" />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-6 gap-4">
+              <div className="col-span-3 space-y-1">
+                <label className="text-[10px] font-bold text-slate-400 ml-1">从业年限 (年)</label>
+                <input id="err-yearsOfExperience" type="number" value={formData.yearsOfExperience} onChange={e => setFormData({...formData, yearsOfExperience: e.target.value})} className={cn("w-full px-3 py-2 bg-slate-50 border rounded-xl text-xs transition-all", errors.includes('yearsOfExperience') ? "border-red-500 bg-red-50" : "border-slate-100 font-bold")} placeholder="从业年限" />
+              </div>
+              <div className="col-span-3 space-y-1">
+                <label className="text-[10px] font-bold text-slate-400 ml-1">联系电话</label>
+                <input id="err-phone" type="text" value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} className={cn("w-full px-3 py-2 bg-slate-50 border rounded-xl text-xs font-bold transition-all", errors.includes('phone') ? "border-red-500 bg-red-50" : "border-slate-100")} placeholder="联系电话" />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-6 gap-4">
+              <div className="col-span-6 space-y-1">
+                <label className="text-[10px] font-bold text-slate-400 ml-1">日常爱好</label>
+                <input type="text" value={formData.hobbies} onChange={e => setFormData({...formData, hobbies: e.target.value})} className="w-full px-3 py-2 bg-slate-50 border border-slate-100 rounded-xl text-xs" placeholder="请输入您的爱好" />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-1">
+                <label className="text-[10px] font-bold text-slate-400 ml-1">籍贯 (精确到市)</label>
+                <input id="err-nativePlace" type="text" value={formData.nativePlace} onChange={e => setFormData({...formData, nativePlace: e.target.value})} className={cn("w-full px-3 py-2 bg-slate-50 border rounded-xl text-xs transition-all", errors.includes('nativePlace') ? "border-red-500 bg-red-50" : "border-slate-100")} placeholder="如：山东省青岛市" />
+              </div>
+              <div className="space-y-1">
+                <label className="text-[10px] font-bold text-slate-400 ml-1">本市居住地址</label>
+                <input id="err-residence" type="text" value={formData.residence} onChange={e => setFormData({...formData, residence: e.target.value})} className={cn("w-full px-3 py-2 bg-slate-50 border rounded-xl text-xs transition-all", errors.includes('residence') ? "border-red-500 bg-red-50" : "border-slate-100")} placeholder="请输入现详细住址" />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-6 gap-4">
+              <div className="col-span-3 space-y-2">
+                <label className="text-[10px] font-bold text-slate-400 ml-1">是否可熟练操作智能手机</label>
+                <div className="flex gap-2">
+                  <button onClick={() => setFormData({...formData, smartphoneProficiency: true})} className={cn("flex-1 py-1.5 rounded-lg text-[11px] font-bold border transition-all", formData.smartphoneProficiency ? "bg-slate-900 border-slate-900 text-white" : "bg-white border-slate-100 text-slate-400")}>是</button>
+                  <button onClick={() => setFormData({...formData, smartphoneProficiency: false})} className={cn("flex-1 py-1.5 rounded-lg text-[11px] font-bold border transition-all", !formData.smartphoneProficiency ? "bg-slate-900 border-slate-900 text-white" : "bg-white border-slate-100 text-slate-400")}>否</button>
+                </div>
+              </div>
+              <div className="col-span-3 space-y-1">
+                <label className="text-[10px] font-bold text-slate-400 ml-1">紧急联系电话</label>
+                <input id="err-emergencyPhone" type="text" value={formData.emergencyPhone} onChange={e => setFormData({...formData, emergencyPhone: e.target.value})} className={cn("w-full px-3 py-2 bg-slate-50 border rounded-xl text-xs transition-all", errors.includes('emergencyPhone') ? "border-red-500 bg-red-50" : "border-slate-100")} placeholder="紧急联系电话" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="fixed bottom-0 left-0 right-0 p-6 bg-white border-t border-slate-100 backdrop-blur-md bg-white/90 z-20">
+        <button onClick={handleSubmit} className="w-full py-4 bg-slate-900 text-white font-black rounded-2xl shadow-xl active:scale-[0.98] transition-all">
+          提交认证申请
+        </button>
+      </div>
+    </motion.div>
+  );
+};
+
+const ForemanCertificationForm = ({ onBack, onSubmit }: { onBack: () => void, onSubmit: (data: any) => void }) => {
+  const [formData, setFormData] = useState({
+    name: "", gender: "男", age: "", idNumber: "", education: "", hobbies: "", phone: "13588990011",
+    nativePlace: "", residence: "", smartphoneProficiency: true, emergencyPhone: "",
+    yearsOfExperience: "", hasActualCases: "", projects: "", successfulCases: "",
+    entityType: "无", hasQualification: false, hasInsurance: false, isFixedTeam: false,
+    ownerEvaluation: "", selfEvaluation: ""
+  });
+
+  const [errors, setErrors] = useState<string[]>([]);
+  const [experiences, setExperiences] = useState([{ time: "", company: "", position: "" }]);
+  const [renovTypes, setRenovTypes] = useState<string[]>([]);
+  const [houseSizes, setHouseSizes] = useState<string[]>([]);
+  const [renovStyles, setRenovStyles] = useState<string[]>([]);
+  const [teamSizes, setTeamSizes] = useState({ waterElectric: "0", woodwork: "0", masonry: "0", painting: "0" });
+
+  const validate = () => {
+    const newErrors: string[] = [];
+    console.log("Validating form with data:", formData);
+    const requiredFields = [
+      'name', 'age', 'idNumber', 'education', 'phone', 'emergencyPhone',
+      'nativePlace', 'residence', 'yearsOfExperience', 'hasActualCases',
+      'projects', 'successfulCases', 'ownerEvaluation', 'selfEvaluation'
+    ];
+    
+    requiredFields.forEach(field => {
+      if (!formData[field as keyof typeof formData]?.toString().trim()) {
+        newErrors.push(field);
+      }
+    });
+
+    if (renovTypes.length === 0) newErrors.push('renovTypes');
+    if (houseSizes.length === 0) newErrors.push('houseSizes');
+    if (renovStyles.length === 0) newErrors.push('renovStyles');
+    
+    if (!teamSizes.waterElectric || !teamSizes.woodwork || !teamSizes.masonry || !teamSizes.painting) {
+      newErrors.push('teamSizes');
+    }
+
+    setErrors(newErrors);
+    if (newErrors.length > 0) {
+      console.log("Validation failed. Missing fields:", newErrors);
+      // Optional: find first error element and scroll to it
+      const firstError = newErrors[0];
+      const errorEl = document.getElementsByName(firstError)[0] || document.getElementById(`error-${firstError}`);
+      if (errorEl) {
+        errorEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
+    return newErrors.length === 0;
+  };
+
+  const handleSubmit = () => {
+    if (validate()) {
+      onSubmit({...formData, experiences, renovTypes, houseSizes, renovStyles, teamSizes});
+    } else {
+      alert("请填写完整带星号或标记的必填信息");
+    }
+  };
+
+  const toggleList = (list: string[], setList: (l: string[]) => void, item: string) => {
+    if (list.includes(item)) setList(list.filter(i => i !== item));
+    else setList([...list, item]);
+  };
+
+  const addExperience = () => setExperiences([...experiences, { time: "", company: "", position: "" }]);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, x: 20 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: -20 }}
+      className="fixed inset-0 z-[300] bg-white flex flex-col"
+    >
+      <div className="sticky top-0 z-10 bg-white px-4 py-4 flex items-center justify-between border-b border-slate-100">
+        <div className="flex items-center gap-4">
+          <button onClick={onBack} className="p-1 hover:bg-slate-100 rounded-full transition-colors">
+            <ChevronLeft className="w-6 h-6 text-slate-800" />
+          </button>
+          <h1 className="text-lg font-bold text-slate-900">工长信息登记</h1>
+        </div>
+      </div>
+
+      <div className="flex-1 overflow-y-auto pb-32">
+        <div className="p-6 space-y-8">
+          {/* Section 1: Basic Info */}
+          <div className="space-y-4">
+            <div className="flex items-center gap-2 mb-4">
+              <div className="w-1.5 h-6 bg-slate-900 rounded-full" />
+              <h2 className="text-base font-black text-slate-900">一、基本信息</h2>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-1">
+                <label className="text-[10px] font-bold text-slate-400 ml-1">姓名</label>
+                <input name="name" type="text" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className={cn("w-full px-4 py-2.5 bg-slate-50 border rounded-xl text-sm transition-all", errors.includes('name') ? "border-red-500 bg-red-50/50" : "border-slate-100 font-bold")} placeholder="请输入" />
+              </div>
+              <div className="space-y-1">
+                <label className="text-[10px] font-bold text-slate-400 ml-1">性别</label>
+                <select name="gender" value={formData.gender} onChange={e => setFormData({...formData, gender: e.target.value})} className="w-full px-4 py-2.5 bg-slate-50 border border-slate-100 rounded-xl text-sm">
+                  <option>男</option>
+                  <option>女</option>
+                </select>
+              </div>
+              <div className="space-y-1">
+                <label className="text-[10px] font-bold text-slate-400 ml-1">年龄</label>
+                <input name="age" type="number" value={formData.age} onChange={e => setFormData({...formData, age: e.target.value})} className={cn("w-full px-4 py-2.5 bg-slate-50 border rounded-xl text-sm transition-all", errors.includes('age') ? "border-red-500 bg-red-50/50" : "border-slate-100")} placeholder="请输入" />
+              </div>
+              <div className="space-y-1">
+                <label className="text-[10px] font-bold text-slate-400 ml-1">学历</label>
+                <input name="education" type="text" value={formData.education} onChange={e => setFormData({...formData, education: e.target.value})} className={cn("w-full px-4 py-2.5 bg-slate-50 border rounded-xl text-sm transition-all", errors.includes('education') ? "border-red-500 bg-red-50/50" : "border-slate-100")} placeholder="请输入" />
+              </div>
+            </div>
+            <div className="space-y-1">
+              <label className="text-[10px] font-bold text-slate-400 ml-1">身份证号码</label>
+              <input name="idNumber" type="text" value={formData.idNumber} onChange={e => setFormData({...formData, idNumber: e.target.value})} className={cn("w-full px-4 py-2.5 bg-slate-50 border rounded-xl text-sm font-mono transition-all", errors.includes('idNumber') ? "border-red-500 bg-red-50/50" : "border-slate-100")} placeholder="请输入18位身份证号" />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-1">
+                <label className="text-[10px] font-bold text-slate-400 ml-1">联系电话</label>
+                <input name="phone" type="text" value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} className={cn("w-full px-4 py-2.5 bg-slate-50 border rounded-xl text-sm transition-all", errors.includes('phone') ? "border-red-500 bg-red-50/50" : "border-slate-100")} />
+              </div>
+              <div className="space-y-1">
+                <label className="text-[10px] font-bold text-slate-400 ml-1">紧急联系电话</label>
+                <input name="emergencyPhone" type="text" value={formData.emergencyPhone} onChange={e => setFormData({...formData, emergencyPhone: e.target.value})} className={cn("w-full px-4 py-2.5 bg-slate-50 border rounded-xl text-sm transition-all", errors.includes('emergencyPhone') ? "border-red-500 bg-red-50/50" : "border-slate-100")} placeholder="紧急联系人电话" />
+              </div>
+            </div>
+            <div className="space-y-1">
+              <label className="text-[10px] font-bold text-slate-400 ml-1">籍贯 (精确到市)</label>
+              <input name="nativePlace" type="text" value={formData.nativePlace} onChange={e => setFormData({...formData, nativePlace: e.target.value})} className={cn("w-full px-4 py-2.5 bg-slate-50 border rounded-xl text-sm transition-all", errors.includes('nativePlace') ? "border-red-500 bg-red-50/50" : "border-slate-100")} placeholder="如：山东省青岛市" />
+            </div>
+            <div className="space-y-1">
+              <label className="text-[10px] font-bold text-slate-400 ml-1">本市居住地址</label>
+              <input name="residence" type="text" value={formData.residence} onChange={e => setFormData({...formData, residence: e.target.value})} className={cn("w-full px-4 py-2.5 bg-slate-50 border rounded-xl text-sm transition-all", errors.includes('residence') ? "border-red-500 bg-red-50/50" : "border-slate-100")} placeholder="请输入详细地址" />
+            </div>
+            <div className="flex items-center justify-between p-4 bg-slate-50 rounded-2xl border border-slate-100">
+              <span className="text-xs font-bold text-slate-700">可熟练操作智能手机</span>
+              <div className="flex gap-4">
+                <button onClick={() => setFormData({...formData, smartphoneProficiency: true})} className={cn("px-4 py-1.5 rounded-lg text-xs font-bold", formData.smartphoneProficiency ? "bg-slate-900 text-white" : "bg-white text-slate-400 border border-slate-100")}>是</button>
+                <button onClick={() => setFormData({...formData, smartphoneProficiency: false})} className={cn("px-4 py-1.5 rounded-lg text-xs font-bold", !formData.smartphoneProficiency ? "bg-slate-900 text-white" : "bg-white text-slate-400 border border-slate-100")}>否</button>
+              </div>
+            </div>
+          </div>
+
+          {/* Section 2: Experience */}
+          <div className="space-y-4">
+            <div className="flex items-center gap-2 mb-4">
+              <div className="w-1.5 h-6 bg-slate-900 rounded-full" />
+              <h2 className="text-base font-black text-slate-900">二、履历信息</h2>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-1">
+                <label className="text-[10px] font-bold text-slate-400 ml-1">从业年限 (年)</label>
+                <input name="yearsOfExperience" type="number" value={formData.yearsOfExperience} onChange={e => setFormData({...formData, yearsOfExperience: e.target.value})} className={cn("w-full px-4 py-2.5 bg-slate-50 border rounded-xl text-sm transition-all", errors.includes('yearsOfExperience') ? "border-red-500 bg-red-50/50" : "border-slate-100")} placeholder="如：10" />
+              </div>
+              <div className="space-y-1">
+                <label className="text-[10px] font-bold text-slate-400 ml-1">可提供案例 (套)</label>
+                <input name="hasActualCases" type="number" value={formData.hasActualCases} onChange={e => setFormData({...formData, hasActualCases: e.target.value})} className={cn("w-full px-4 py-2.5 bg-slate-50 border rounded-xl text-sm transition-all", errors.includes('hasActualCases') ? "border-red-500 bg-red-50/50" : "border-slate-100")} placeholder="如：5" />
+              </div>
+            </div>
+            
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <label className="text-[10px] font-bold text-slate-400 ml-1">从业经历</label>
+                <button onClick={addExperience} className="text-[10px] font-bold text-blue-600 flex items-center gap-0.5"><Plus className="w-3 h-3" /> 添加经历</button>
+              </div>
+              {experiences.map((exp, idx) => (
+                <div key={idx} className="p-4 bg-slate-50 rounded-2xl border border-slate-100 space-y-3">
+                  <input type="text" placeholder="时间 (如: 2015.01-2018.12)" value={exp.time} onChange={e => {
+                    const newExp = [...experiences];
+                    newExp[idx].time = e.target.value;
+                    setExperiences(newExp);
+                  }} className="w-full bg-white border border-slate-100 px-3 py-2 rounded-xl text-xs" />
+                  <div className="grid grid-cols-2 gap-2">
+                    <input type="text" placeholder="公司名称" value={exp.company} onChange={e => {
+                      const newExp = [...experiences];
+                      newExp[idx].company = e.target.value;
+                      setExperiences(newExp);
+                    }} className="bg-white border border-slate-100 px-3 py-2 rounded-xl text-xs" />
+                    <input type="text" placeholder="岗位" value={exp.position} onChange={e => {
+                      const newExp = [...experiences];
+                      newExp[idx].position = e.target.value;
+                      setExperiences(newExp);
+                    }} className="bg-white border border-slate-100 px-3 py-2 rounded-xl text-xs" />
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="space-y-1">
+              <label className="text-[10px] font-bold text-slate-400 ml-1">在建/可参观项目 (数+地址)</label>
+              <textarea name="projects" value={formData.projects} onChange={e => setFormData({...formData, projects: e.target.value})} className={cn("w-full px-4 py-3 bg-slate-50 border rounded-2xl text-sm min-h-[80px] transition-all", errors.includes('projects') ? "border-red-500 bg-red-50/50" : "border-slate-100")} placeholder="如：3个。地址：..." />
+            </div>
+
+            <div className="space-y-4 pt-2">
+              <div id="error-renovTypes" className={cn("space-y-2 p-3 rounded-2xl transition-all", errors.includes('renovTypes') && "bg-red-50 border border-red-100")}>
+                <label className="text-xs font-bold text-slate-700 ml-1 flex items-center gap-1">
+                  擅长装修类型 {errors.includes('renovTypes') && <span className="text-red-500 text-[10px]">*未选择</span>}
+                </label>
+                <div className="flex flex-wrap gap-2">
+                  {["新房毛坯", "老房翻新", "局部改造", "全屋整装", "公装"].map(t => (
+                    <button key={t} onClick={() => toggleList(renovTypes, setRenovTypes, t)} className={cn("px-3 py-1.5 rounded-full text-xs font-medium border transition-all", renovTypes.includes(t) ? "bg-slate-900 border-slate-900 text-white" : "bg-white border-slate-100 text-slate-500")}>{t}</button>
+                  ))}
+                </div>
+              </div>
+              <div id="error-houseSizes" className={cn("space-y-2 p-3 rounded-2xl transition-all", errors.includes('houseSizes') && "bg-red-50 border border-red-100")}>
+                <label className="text-xs font-bold text-slate-700 ml-1 flex items-center gap-1">
+                  擅长装修户型 {errors.includes('houseSizes') && <span className="text-red-500 text-[10px]">*未选择</span>}
+                </label>
+                <div className="flex flex-wrap gap-2">
+                  {["豪宅2000平以上", "大宅500~2000平", "普通300~500平", "300平以下"].map(t => (
+                    <button key={t} onClick={() => toggleList(houseSizes, setHouseSizes, t)} className={cn("px-3 py-1.5 rounded-full text-xs font-medium border transition-all", houseSizes.includes(t) ? "bg-slate-900 border-slate-900 text-white" : "bg-white border-slate-100 text-slate-500")}>{t}</button>
+                  ))}
+                </div>
+              </div>
+              <div id="error-renovStyles" className={cn("space-y-2 p-3 rounded-2xl transition-all", errors.includes('renovStyles') && "bg-red-50 border border-red-100")}>
+                <label className="text-xs font-bold text-slate-700 ml-1 flex items-center gap-1">
+                  擅长装修风格 {errors.includes('renovStyles') && <span className="text-red-500 text-[10px]">*未选择</span>}
+                </label>
+                <div className="flex flex-wrap gap-2">
+                  {["中式", "现代", "欧式", "法式", "工业", "日式"].map(t => (
+                    <button key={t} onClick={() => toggleList(renovStyles, setRenovStyles, t)} className={cn("px-3 py-1.5 rounded-full text-xs font-medium border transition-all", renovStyles.includes(t) ? "bg-slate-900 border-slate-900 text-white" : "bg-white border-slate-100 text-slate-500")}>{t}</button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-1">
+              <label className="text-[10px] font-bold text-slate-400 ml-1">成功项目案例 (具体描述)</label>
+              <textarea name="successfulCases" value={formData.successfulCases} onChange={e => setFormData({...formData, successfulCases: e.target.value})} className={cn("w-full px-4 py-3 bg-slate-50 border rounded-2xl text-sm min-h-[120px] transition-all", errors.includes('successfulCases') ? "border-red-500 bg-red-50/50" : "border-slate-100")} placeholder="请详细描述您的代表作品..." />
+            </div>
+          </div>
+
+          {/* Section 3: Team */}
+          <div className="space-y-4">
+            <div className="flex items-center gap-2 mb-4">
+              <div className="w-1.5 h-6 bg-slate-900 rounded-full" />
+              <h2 className="text-base font-black text-slate-900">三、团队信息</h2>
+            </div>
+            <div className="space-y-2">
+              <label className="text-xs font-bold text-slate-700 ml-1">经营主体</label>
+              <div className="flex gap-2">
+                {["公司", "个体户", "无"].map(t => (
+                  <button key={t} onClick={() => setFormData({...formData, entityType: t})} className={cn("flex-1 py-3 rounded-2xl border text-sm font-bold transition-all", formData.entityType === t ? "bg-slate-900 border-slate-900 text-white" : "bg-white border-slate-100 text-slate-500")}>{t}</button>
+                ))}
+              </div>
+            </div>
+            <div className="flex items-center justify-between p-4 bg-slate-50 rounded-2xl">
+              <span className="text-xs font-bold text-slate-700">自有施工资质</span>
+              <div className="flex gap-4">
+                <button onClick={() => setFormData({...formData, hasQualification: true})} className={cn("px-4 py-1.5 rounded-lg text-xs font-bold", formData.hasQualification ? "bg-slate-900 text-white" : "bg-white text-slate-400 border border-slate-100")}>有</button>
+                <button onClick={() => setFormData({...formData, hasQualification: false})} className={cn("px-4 py-1.5 rounded-lg text-xs font-bold", !formData.hasQualification ? "bg-slate-900 text-white" : "bg-white text-slate-400 border border-slate-100")}>无</button>
+              </div>
+            </div>
+            <div id="error-teamSizes" className={cn("bg-slate-50 p-5 rounded-[24px] space-y-4 border transition-all", errors.includes('teamSizes') ? "border-red-300 bg-red-50/50" : "border-transparent")}>
+              <div className="flex items-center justify-between">
+                <label className="text-xs font-bold text-slate-700 ml-1">自有班组数量 (组)</label>
+                {errors.includes('teamSizes') && <span className="text-red-500 text-[10px] font-bold">请完善人数 (可填写0)</span>}
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className={cn("flex items-center gap-2 bg-white px-3 py-2 rounded-xl border transition-all", errors.includes('teamSizes') && !teamSizes.waterElectric ? "border-red-300 shadow-sm" : "border-slate-100")}>
+                  <span className="text-xs text-slate-500 whitespace-nowrap">水电</span>
+                  <input type="number" placeholder="0" value={teamSizes.waterElectric} onChange={e => setTeamSizes({...teamSizes, waterElectric: e.target.value})} className="w-full text-sm outline-none font-bold" />
+                </div>
+                <div className={cn("flex items-center gap-2 bg-white px-3 py-2 rounded-xl border transition-all", errors.includes('teamSizes') && !teamSizes.woodwork ? "border-red-300 shadow-sm" : "border-slate-100")}>
+                  <span className="text-xs text-slate-500 whitespace-nowrap">木工</span>
+                  <input type="number" placeholder="0" value={teamSizes.woodwork} onChange={e => setTeamSizes({...teamSizes, woodwork: e.target.value})} className="w-full text-sm outline-none font-bold" />
+                </div>
+                <div className={cn("flex items-center gap-2 bg-white px-3 py-2 rounded-xl border transition-all", errors.includes('teamSizes') && !teamSizes.masonry ? "border-red-300 shadow-sm" : "border-slate-100")}>
+                  <span className="text-xs text-slate-500 whitespace-nowrap">瓦工</span>
+                  <input type="number" placeholder="0" value={teamSizes.masonry} onChange={e => setTeamSizes({...teamSizes, masonry: e.target.value})} className="w-full text-sm outline-none font-bold" />
+                </div>
+                <div className={cn("flex items-center gap-2 bg-white px-3 py-2 rounded-xl border transition-all", errors.includes('teamSizes') && !teamSizes.painting ? "border-red-300 shadow-sm" : "border-slate-100")}>
+                  <span className="text-xs text-slate-500 whitespace-nowrap">油工</span>
+                  <input type="number" placeholder="0" value={teamSizes.painting} onChange={e => setTeamSizes({...teamSizes, painting: e.target.value})} className="w-full text-sm outline-none font-bold" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Section 4: Eval */}
+          <div className="space-y-4">
+            <div className="flex items-center gap-2 mb-4">
+              <div className="w-1.5 h-6 bg-slate-900 rounded-full" />
+              <h2 className="text-base font-black text-slate-900">四、评价信息</h2>
+            </div>
+            <div className="space-y-1">
+              <label className="text-[10px] font-bold text-slate-400 ml-1">过往业主评价</label>
+              <textarea name="ownerEvaluation" value={formData.ownerEvaluation} onChange={e => setFormData({...formData, ownerEvaluation: e.target.value})} className={cn("w-full px-4 py-3 bg-slate-50 border rounded-2xl text-sm min-h-[100px] transition-all", errors.includes('ownerEvaluation') ? "border-red-500 bg-red-50/50" : "border-slate-100")} placeholder="摘录或概括以往客户对您评价..." />
+            </div>
+            <div className="space-y-1">
+              <label className="text-[10px] font-bold text-slate-400 ml-1">自我客观评价 (做事、性格、荣誉等)</label>
+              <textarea name="selfEvaluation" value={formData.selfEvaluation} onChange={e => setFormData({...formData, selfEvaluation: e.target.value})} className={cn("w-full px-4 py-3 bg-slate-50 border rounded-2xl text-sm min-h-[120px] transition-all", errors.includes('selfEvaluation') ? "border-red-500 bg-red-50/50" : "border-slate-100")} placeholder="包含：做事、性格、荣誉、利他、志向等等..." />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="fixed bottom-0 left-0 right-0 p-6 bg-white border-t border-slate-100 backdrop-blur-md bg-white/90 z-20">
+        <button 
+          onClick={handleSubmit}
+          className="w-full py-4 bg-slate-900 text-white font-black rounded-2xl shadow-xl active:scale-[0.98] transition-all"
+        >
+          提交认证申请
+        </button>
+      </div>
+    </motion.div>
+  );
+};
+
+const PractitionerRoleApplyPage = ({ onBack, onComplete, certifiedRoles, reviewingRoles = [] }: { onBack: () => void, onComplete: (role: string) => void, certifiedRoles: string[], reviewingRoles?: string[] }) => {
+  const roles = [
+    { id: "foreman", label: "工长", desc: "施工现场核心，统筹进度与品质", icon: Hammer },
+    { id: "designer", label: "设计师", desc: "空间美学专家，全案交付引领者", icon: PenTool },
+    { id: "demolition", label: "拆除工", desc: "改造第一步，规范施工保障安全", icon: Trash2 },
+    { id: "electrician", label: "水电工", desc: "品质隐蔽工程，筑牢居家根基", icon: Zap },
+    { id: "woodworker", label: "木工", desc: "精湛木作工艺，演绎空间细节", icon: Ruler },
+    { id: "mason", label: "泥瓦工", desc: "方圆尽显功力，构筑稳固空间", icon: LayoutGrid },
+    { id: "painter", label: "油漆工", desc: "色彩与质感，最后的一道工序", icon: Palette },
+  ];
+
+  const [selectedRole, setSelectedRole] = useState<string | null>(null);
+
+  const handleApply = () => {
+    if (selectedRole) {
+      onComplete(selectedRole);
+    }
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, x: 20 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: -20 }}
+      className="fixed inset-0 z-[250] bg-slate-50 flex flex-col"
+    >
+      <div className="sticky top-0 z-10 bg-white px-4 py-4 flex items-center gap-4 border-b border-slate-100">
+        <button onClick={onBack} className="p-1 hover:bg-slate-100 rounded-full transition-colors">
+          <ChevronLeft className="w-6 h-6 text-slate-800" />
+        </button>
+        <h1 className="text-lg font-bold text-slate-900">选择认证角色</h1>
+      </div>
+
+      <div className="flex-1 overflow-y-auto p-6">
+        <div className="space-y-4">
+          {roles.map((role) => {
+            const isCertified = certifiedRoles.includes(role.label);
+            const isReviewing = reviewingRoles.includes(role.label);
+            const isDisabled = isCertified || isReviewing;
+            return (
+              <button
+                key={role.id}
+                disabled={isDisabled}
+                onClick={() => setSelectedRole(role.label)}
+                className={cn(
+                  "w-full p-6 pb-5 rounded-[32px] border text-left transition-all relative overflow-hidden group",
+                  isDisabled 
+                    ? "bg-slate-100/50 border-slate-100 cursor-not-allowed opacity-60" 
+                    : selectedRole === role.label
+                      ? "bg-white border-blue-500 shadow-xl shadow-blue-500/10 ring-2 ring-blue-500/10"
+                      : "bg-white border-slate-100 hover:border-slate-200"
+                )}
+              >
+                <div className="flex items-start gap-4">
+                  <div className={cn(
+                    "w-12 h-12 rounded-2xl flex items-center justify-center transition-colors shadow-sm bg-slate-50",
+                    selectedRole === role.label ? "text-blue-500" : "text-slate-400"
+                  )}>
+                    <role.icon className="w-6 h-6" />
+                  </div>
+                  <div className="flex-1 py-1">
+                    <div className="flex items-center gap-2">
+                       <h3 className="text-base font-black text-slate-900">{role.label}</h3>
+                       {isCertified && (
+                         <span className="px-2 py-0.5 bg-emerald-100 text-emerald-600 text-[10px] font-bold rounded-md">已认证</span>
+                       )}
+                       {isReviewing && (
+                         <span className="px-2 py-0.5 bg-amber-100 text-amber-600 text-[10px] font-bold rounded-md">认证审核中</span>
+                       )}
+                    </div>
+                    <p className="text-xs text-slate-500 mt-1">{role.desc}</p>
+                  </div>
+                  {!isDisabled && (
+                    <div className={cn(
+                      "w-6 h-6 rounded-full border-2 flex items-center justify-center mt-1 transition-all",
+                      selectedRole === role.label ? "bg-blue-600 border-blue-600" : "border-slate-200"
+                    )}>
+                      {selectedRole === role.label && <Check className="w-3.5 h-3.5 text-white stroke-[4]" />}
+                    </div>
+                  )}
+                </div>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      <div className="p-6 bg-white border-t border-slate-100">
+        <button 
+          disabled={!selectedRole}
+          onClick={handleApply}
+          className="w-full py-4 bg-blue-600 disabled:bg-slate-300 text-white font-black rounded-2xl shadow-lg active:scale-[0.98] transition-all"
+        >
+          下一步
+        </button>
+      </div>
+    </motion.div>
+  );
+};
+
 const PractitionerCertificationPage = ({
   onBack,
   onStudyCenterClick,
+  onStartCertification,
 }: {
   onBack: () => void;
   onStudyCenterClick: () => void;
+  onStartCertification: () => void;
 }) => {
   const sections = [
     {
@@ -10342,31 +11336,41 @@ const PractitionerCertificationPage = ({
           </div>
           <div className="flex flex-wrap gap-2">
             {[
-              { label: "工长", certified: true },
-              { label: "设计师", certified: true },
-              { label: "拆除工", certified: false },
-              { label: "水电工", certified: false },
-              { label: "木工", certified: false },
-              { label: "泥瓦工", certified: false },
-              { label: "油漆工", certified: false },
-            ].filter(role => role.certified).length > 0 ? (
+              { label: "工长", status: "none" },
+              { label: "设计师", status: "none" },
+              { label: "拆除工", status: "certified" },
+              { label: "水电工", status: "reviewing" },
+              { label: "木工", status: "none" },
+              { label: "泥瓦工", status: "none" },
+              { label: "油漆工", status: "none" },
+            ].filter(role => role.status !== "none").length > 0 ? (
               [
-                { label: "工长", certified: true },
-                { label: "设计师", certified: true },
-                { label: "拆除工", certified: false },
-                { label: "水电工", certified: false },
-                { label: "木工", certified: false },
-                { label: "泥瓦工", certified: false },
-                { label: "油漆工", certified: false },
+                { label: "工长", status: "none" },
+                { label: "设计师", status: "none" },
+                { label: "拆除工", status: "certified" },
+                { label: "水电工", status: "reviewing" },
+                { label: "木工", status: "none" },
+                { label: "泥瓦工", status: "none" },
+                { label: "油漆工", status: "none" },
               ]
-                .filter((role) => role.certified)
+                .filter((role) => role.status !== "none")
                 .map((role) => (
                   <div
                     key={role.label}
-                    className="px-4 py-2 rounded-xl text-[12px] font-bold bg-emerald-500 text-white shadow-md shadow-emerald-500/20 transition-all flex items-center gap-1.5"
+                    className={cn(
+                      "px-4 py-2 rounded-xl text-[12px] font-bold shadow-md transition-all flex items-center gap-1.5",
+                      role.status === "certified" 
+                        ? "bg-emerald-500 text-white shadow-emerald-500/20" 
+                        : "bg-amber-500 text-white shadow-amber-500/20"
+                    )}
                   >
-                    <Check className="w-3 h-3 stroke-[4px]" />
+                    {role.status === "certified" ? (
+                      <Check className="w-3 h-3 stroke-[4px]" />
+                    ) : (
+                      <Clock className="w-3 h-3 stroke-[3px]" />
+                    )}
                     {role.label}
+                    {role.status === "reviewing" && <span className="text-[10px] opacity-80">(审核中)</span>}
                   </div>
                 ))
             ) : (
@@ -10401,17 +11405,11 @@ const PractitionerCertificationPage = ({
                 <section.icon className="w-6 h-6" />
               </div>
               <div className="flex-1">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-base font-bold text-slate-900">
-                    {section.title}
-                  </h3>
-                  <span className="text-xs font-medium text-slate-400">
-                    {section.status}
-                  </span>
-                </div>
+                <h3 className="text-base font-bold text-slate-900">
+                  {section.title}
+                </h3>
                 <p className="text-xs text-slate-500 mt-1">{section.desc}</p>
               </div>
-              <ChevronRight className="w-5 h-5 text-slate-300 group-hover:text-slate-400 transition-colors" />
             </div>
           ))}
         </div>
@@ -10439,13 +11437,17 @@ const PractitionerCertificationPage = ({
       </div>
 
       <div className="p-6 bg-white border-t border-slate-100">
-        <button className="w-full py-4 bg-blue-600 text-white font-bold rounded-2xl shadow-lg shadow-blue-200 active:scale-[0.98] transition-all">
+        <button 
+          onClick={onStartCertification}
+          className="w-full py-4 bg-blue-600 text-white font-bold rounded-2xl shadow-lg shadow-blue-200 active:scale-[0.98] transition-all"
+        >
           立即开启认证
         </button>
       </div>
     </motion.div>
   );
 };
+
 
 const SearchPage = ({ onBack }: { onBack: () => void }) => {
   const hotSearches = [
@@ -11909,12 +12911,38 @@ const LeadNotificationsPage = ({ onBack }: { onBack: () => void }) => {
 
 export default function App() {
   const [page, setPage] = useState<string>("home");
-  const [lastPage, setLastPage] = useState<string>("home");
+  const [history, setHistory] = useState<string[]>([]);
 
   const navigateTo = (newPage: string) => {
-    setLastPage(page);
+    if (newPage === page) return;
+    setHistory(prev => [...prev, page]);
     setPage(newPage);
   };
+
+  const goBack = () => {
+    if (history.length > 0) {
+      const prevHistory = [...history];
+      const prevPage = prevHistory.pop() || "home";
+      setHistory(prevHistory);
+      setPage(prevPage);
+    } else {
+      setPage("home");
+    }
+  };
+  const [orderStatus, setOrderStatus] = useState<"working" | "available" | "resting">("available");
+  const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
+
+  const statusConfig = {
+    working: { label: "承接中", color: "text-white", bg: "bg-orange-500", border: "border-orange-600", dot: "bg-white", desc: "正在处理项目，响应可能较慢" },
+    available: { label: "可预约", color: "text-white", bg: "bg-emerald-500", border: "border-emerald-600", dot: "bg-white", desc: "目前空闲，随时欢迎咨询" },
+    resting: { label: "休息中", color: "text-white", bg: "bg-slate-400", border: "border-slate-500", dot: "bg-white", desc: "暂时不接新活，后期可约" },
+  };
+
+  const handleStatusSelect = (status: "working" | "available" | "resting") => {
+    setOrderStatus(status);
+    setIsStatusModalOpen(false);
+  };
+
   const [selectedBannerIndex, setSelectedBannerIndex] = useState(0);
   const [detailSource, setDetailSource] = useState<
     "home" | "cases" | "lead-list"
@@ -11942,6 +12970,7 @@ export default function App() {
     setIsPublishOpen(true);
   };
   const [selectedCity, setSelectedCity] = useState("北京");
+  const [workerRole, setWorkerRole] = useState<string | null>(null);
   const listSectionRef = useRef<HTMLDivElement>(null);
 
   const scrollToLeads = () => {
@@ -11992,13 +13021,13 @@ export default function App() {
   ) => {
     setSelectedRecruitment(item);
     if (item.id === "hr1") {
-      setPage("studio-recruitment-detail");
+      navigateTo("studio-recruitment-detail");
     } else if (item.id === "hr2") {
-      setPage("designer-recruitment-detail");
+      navigateTo("designer-recruitment-detail");
     } else if (item.id === "hr3") {
-      setPage("foreman-recruitment-detail");
+      navigateTo("foreman-recruitment-detail");
     } else {
-      setPage("recruitment-detail");
+      navigateTo("recruitment-detail");
     }
   };
 
@@ -12082,16 +13111,16 @@ export default function App() {
             <HomeCarousel
               onClick={(index) => {
                 setSelectedBannerIndex(index);
-                setPage("banner-detail");
+                navigateTo("banner-detail");
               }}
             />
-            <CoreModeSection onModeClick={() => setPage("mode-intro")} />
+            <CoreModeSection onModeClick={() => navigateTo("mode-intro")} />
             <HighEndRecruitment
               onSelectRecruitment={handleSelectRecruitment}
-              onCertificationClick={() => setPage("practitioner-certification")}
+              onCertificationClick={() => navigateTo("practitioner-certification")}
             />
             <SecondaryGrid
-              onInitiatorClick={() => setPage("initiator-recruitment")}
+              onInitiatorClick={() => navigateTo("initiator-recruitment")}
               onPublishClick={() => handleOpenPublish("form", "lead")}
             />
             <div ref={listSectionRef}>
@@ -12110,25 +13139,74 @@ export default function App() {
             </div>
           </motion.div>
         )}
-        {page === "search" && <SearchPage onBack={() => setPage("home")} />}
+        {page === "search" && <SearchPage onBack={goBack} />}
         {page === "banner-detail" && (
           <BannerDetailPage
             index={selectedBannerIndex}
-            onBack={() => setPage("home")}
+            onBack={goBack}
           />
         )}
         {page === "practitioner-certification" && (
           <PractitionerCertificationPage
-            onBack={() => setPage("home")}
+            onBack={goBack}
             onStudyCenterClick={() => navigateTo("learning-center")}
+            onStartCertification={() => navigateTo("practitioner-apply-role")}
+          />
+        )}
+        {page === "practitioner-apply-role" && (
+          <PractitionerRoleApplyPage 
+            onBack={goBack}
+            certifiedRoles={["拆除工"]} 
+            reviewingRoles={["水电工"]}
+            onComplete={(role) => {
+              if (role === "工长") {
+                navigateTo("practitioner-apply-foreman");
+              } else if (role === "设计师") {
+                navigateTo("practitioner-apply-designer");
+              } else if (["木工", "泥瓦工", "油漆工", "水电工", "拆除工"].includes(role)) {
+                setWorkerRole(role);
+                navigateTo("practitioner-apply-worker");
+              } else {
+                alert(`已提交 ${role} 认证申请，请耐心等待核实`);
+                setPage("practitioner-certification");
+              }
+            }}
+          />
+        )}
+        {page === "practitioner-apply-worker" && workerRole && (
+          <WorkerCertificationForm 
+            role={workerRole}
+            onBack={goBack}
+            onSubmit={(data) => {
+              console.log("Worker Apply Data:", data);
+              setPage("practitioner-certification");
+            }}
+          />
+        )}
+        {page === "practitioner-apply-foreman" && (
+          <ForemanCertificationForm 
+            onBack={goBack}
+            onSubmit={(data) => {
+              console.log("Foreman Apply Data:", data);
+              setPage("practitioner-certification");
+            }}
+          />
+        )}
+        {page === "practitioner-apply-designer" && (
+          <DesignerCertificationForm 
+            onBack={goBack}
+            onSubmit={(data) => {
+              console.log("Designer Apply Data:", data);
+              setPage("practitioner-certification");
+            }}
           />
         )}
         {page === "learning-center" && (
-          <LearningCenterPage onBack={() => setPage(lastPage)} />
+          <LearningCenterPage onBack={goBack} />
         )}
         {page === "combined-projects" && (
           <CombinedProjectPage
-            onBack={() => setPage("home")}
+            onBack={goBack}
             onSelectLead={(item) => handleSelectLead(item, "lead-list")}
             onSelectRecruitment={handleSelectRecruitment}
           />
@@ -12137,7 +13215,7 @@ export default function App() {
           <DigitalWorldPage onBack={() => setPage("home")} />
         )}
         {page === "mode-intro" && (
-          <ModeIntroPage onBack={() => setPage("home")} />
+          <ModeIntroPage onBack={goBack} />
         )}
         {page === "my-home" && (
           <motion.div
@@ -12211,7 +13289,12 @@ export default function App() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
           >
-            <ProfilePage onMenuClick={handleMenuClick} />
+            <ProfilePage 
+              onMenuClick={handleMenuClick} 
+              orderStatus={orderStatus} 
+              statusConfig={statusConfig} 
+              onStatusClick={() => setIsStatusModalOpen(true)}
+            />
           </motion.div>
         )}
         {page === "digital-identity-settings" && (
@@ -12332,7 +13415,12 @@ export default function App() {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -20 }}
           >
-            <MyArchivePage onBack={() => setPage("profile")} />
+            <MyArchivePage 
+              onBack={() => setPage("profile")} 
+              orderStatus={orderStatus}
+              statusConfig={statusConfig}
+              onStatusClick={() => setIsStatusModalOpen(true)}
+            />
           </motion.div>
         )}
         {page === "my-business-card" && (
@@ -12345,6 +13433,9 @@ export default function App() {
             <MyBusinessCardPage
               onBack={() => setPage("profile")}
               onNavigate={(p) => setPage(p as any)}
+              orderStatus={orderStatus}
+              statusConfig={statusConfig}
+              onStatusClick={() => setIsStatusModalOpen(true)}
             />
           </motion.div>
         )}
@@ -12370,37 +13461,49 @@ export default function App() {
         {page === "cases" && (
           <ProjectLeadsPage
             key="leads"
-            onBack={() => setPage("home")}
+            onBack={goBack}
             onSelectLead={(item) => handleSelectLead(item, "lead-list")}
           />
         )}
         {page === "recruitment" && (
           <ProjectRecruitmentPage
             key="recruitment"
-            onBack={() => setPage("home")}
+            onBack={goBack}
             onSelectRecruitment={handleSelectRecruitment}
           />
         )}
         {page === "recruitment-detail" && selectedRecruitment && (
           <ProjectRecruitmentDetailPage
             item={selectedRecruitment}
-            onBack={() => setPage("recruitment")}
+            onBack={goBack}
           />
         )}
         {page === "studio-recruitment-detail" && (
-          <HighEndStudioDetailPage onBack={() => setPage("home")} />
+          <HighEndStudioDetailPage 
+            onBack={goBack} 
+            onApply={() => {
+              alert("已提交加入申请，人事顾问将尽快与您联系");
+              setPage("home");
+            }}
+          />
         )}
         {page === "designer-recruitment-detail" && (
-          <HighEndDesignerDetailPage onBack={() => setPage("home")} />
+          <HighEndDesignerDetailPage 
+            onBack={goBack} 
+            onApply={() => navigateTo("practitioner-apply-designer")}
+          />
         )}
         {page === "initiator-recruitment" && (
           <InitiatorRecruitmentPage
             defaultCity={selectedCity}
-            onBack={() => setPage("home")}
+            onBack={goBack}
           />
         )}
         {page === "foreman-recruitment-detail" && (
-          <HighEndForemanDetailPage onBack={() => setPage("home")} />
+          <HighEndForemanDetailPage 
+            onBack={goBack} 
+            onApply={() => navigateTo("practitioner-apply-foreman")}
+          />
         )}
         {page === "lead-detail" && selectedLead && (
           <ProjectLeadDetailPage
@@ -12455,6 +13558,67 @@ export default function App() {
         onSelect={handleCitySelect}
         currentCity={selectedCity}
       />
+
+      <AnimatePresence>
+        {isStatusModalOpen && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsStatusModalOpen(false)}
+              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[200]"
+            />
+            <motion.div
+              initial={{ y: "100%" }}
+              animate={{ y: 0 }}
+              exit={{ y: "100%" }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              className="fixed bottom-0 left-0 right-0 bg-white rounded-t-[32px] p-6 pb-12 z-[201] shadow-2xl"
+            >
+              <div className="w-12 h-1.5 bg-gray-200 rounded-full mx-auto mb-6" />
+              <h3 className="text-lg font-black text-gray-900 mb-1">更新接单状态</h3>
+              <p className="text-[11px] text-gray-400 mb-6 font-medium">设置您的工作状态，让客户更精准地找到您</p>
+              
+              <div className="space-y-2.5">
+                {(Object.keys(statusConfig) as Array<keyof typeof statusConfig>).map((key) => {
+                  const cfg = statusConfig[key];
+                  const isActive = orderStatus === key;
+                  return (
+                    <button
+                      key={key}
+                      onClick={() => handleStatusSelect(key)}
+                      className={cn(
+                        "w-full flex items-center gap-4 p-4 rounded-2xl border-2 transition-all active:scale-[0.98]",
+                        isActive ? "border-indigo-500 bg-indigo-50/50" : "border-gray-50 bg-gray-50/50 grayscale opacity-60"
+                      )}
+                    >
+                      <div className={cn("w-10 h-10 rounded-xl flex items-center justify-center shadow-sm", cfg.bg)}>
+                        <div className={cn("w-2 h-2 rounded-full", cfg.dot, isActive && "animate-pulse")} />
+                      </div>
+                      <div className="flex-1 text-left">
+                        <div className={cn("text-sm font-bold flex items-center gap-2", isActive ? "text-indigo-900" : "text-gray-900")}>
+                          {cfg.label}
+                          {isActive && <span className="text-[9px] px-1.5 py-0.5 bg-indigo-100 text-indigo-600 rounded-full">当前</span>}
+                        </div>
+                        <div className="text-[10px] text-gray-400 font-medium mt-0.5">{cfg.desc}</div>
+                      </div>
+                      {isActive && <div className="w-5 h-5 rounded-full bg-indigo-500 flex items-center justify-center"><Check className="w-3 h-3 text-white" /></div>}
+                    </button>
+                  );
+                })}
+              </div>
+              
+              <button
+                onClick={() => setIsStatusModalOpen(false)}
+                className="w-full mt-6 py-4 bg-gray-900 text-white rounded-2xl text-sm font-bold active:scale-[0.98] transition-transform"
+              >
+                取消
+              </button>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
