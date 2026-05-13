@@ -10,6 +10,7 @@ import {
   LayoutGrid,
   Users,
   FileText,
+  FileImage,
   FileX,
   Box,
   MapPin,
@@ -84,6 +85,7 @@ import {
   Palette,
   History,
   Handshake,
+  FileCheck,
   Check,
   Monitor,
   ShieldCheck,
@@ -783,7 +785,7 @@ const HighEndRecruitment = ({
         <div className="space-y-1">
           <h2 className="text-xl font-black text-white tracking-tight flex items-center gap-2">
             <Crown className="w-6 h-6 text-amber-500" />
-            大宅·豪宅 专属招募
+            个性化大宅·专属招募
           </h2>
           <p className="text-amber-500/60 text-[10px] font-bold uppercase tracking-[0.2em]">
             Premium Recruitment Program
@@ -1096,17 +1098,6 @@ const ProjectLeadCard = (props: {
               工期：由合同约定
             </span>
           </div>
-        </div>
-
-        <div className="flex flex-wrap gap-1.5 mt-1">
-          {item.tags.slice(0, 3).map((tag) => (
-            <span
-              key={tag}
-              className="px-2 py-0.5 bg-gray-50 text-gray-400 text-[10px] rounded-md border border-gray-100 font-medium"
-            >
-              {tag}
-            </span>
-          ))}
         </div>
 
         <div className="flex items-center justify-between pt-3 border-t border-gray-50">
@@ -2473,7 +2464,7 @@ const HighEndStudioDetailPage = ({ onBack, onApply }: { onBack: () => void, onAp
               </span>
             </div>
             <h2 className="text-2xl font-extrabold text-white leading-tight mb-2">
-              严选高端工作室招募计划
+              个性化大宅·专属招募
               <br />
               <span className="text-white/80 text-lg">
                 共建高端私宅交付新标准
@@ -6996,19 +6987,6 @@ const MyBusinessCardPage = ({
                   <h3 className="text-xl font-bold tracking-tight flex items-center gap-1.5">
                     沈子怡
                     <Shield className="w-4 h-4 text-blue-400" />
-                    <button 
-                      onClick={onStatusClick}
-                      className={cn(
-                        "flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[9px] font-bold border transition-all active:scale-95 ml-1 shadow-sm",
-                        statusConfig[orderStatus].bg,
-                        statusConfig[orderStatus].color,
-                        statusConfig[orderStatus].border
-                      )}
-                    >
-                      <div className={cn("w-1 h-1 rounded-full animate-pulse", statusConfig[orderStatus].dot)} />
-                      {statusConfig[orderStatus].label}
-                      <ChevronDown className="w-2.5 h-2.5 opacity-70" />
-                    </button>
                   </h3>
                   <p className="text-xs text-slate-300 mt-0.5">
                     资深全案设计师
@@ -7107,6 +7085,89 @@ const MyArchivePage = ({
   onStatusClick: () => void;
 }) => {
   const [showShareModal, setShowShareModal] = useState(false);
+  const [selectedArchiveType, setSelectedArchiveType] = useState<{ title: string; subtitle: string; images: string[] } | null>(null);
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
+
+  if (selectedArchiveType) {
+    return (
+      <motion.div
+        initial={{ opacity: 0, x: 20 }}
+        animate={{ opacity: 1, x: 0 }}
+        exit={{ opacity: 0, x: -20 }}
+        className="min-h-screen bg-[#f8fafc] flex flex-col fixed inset-0 z-50 rounded-[40px] overflow-hidden"
+      >
+        <div className="bg-white sticky top-0 z-10 shadow-sm">
+          <div className="px-4 h-16 flex items-center justify-between">
+            <button
+              onClick={() => setSelectedArchiveType(null)}
+              className="p-2 -ml-2 rounded-full hover:bg-gray-100 transition-colors"
+            >
+              <ChevronLeft className="w-6 h-6 text-slate-800" />
+            </button>
+            <h1 className="text-[17px] font-bold text-slate-900">{selectedArchiveType.title}附件列表</h1>
+            <div className="w-10"></div>
+          </div>
+        </div>
+
+        <div className="flex-1 overflow-y-auto p-4 space-y-4">
+          <div className="flex items-center gap-2 mb-2 px-1">
+            <div className="w-1.5 h-4 bg-emerald-500 rounded-full" />
+            <h2 className="text-[13px] font-bold text-gray-900">{selectedArchiveType.subtitle}</h2>
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            {selectedArchiveType.images.map((img, idx) => (
+              <button 
+                key={idx}
+                onClick={() => setPreviewImage(img)}
+                className="w-full aspect-[3/4] relative rounded-xl overflow-hidden border border-gray-100 shadow-sm active:scale-95 transition-all"
+              >
+                <img src={img} className="absolute inset-0 w-full h-full object-cover" />
+                <div className="absolute inset-0 bg-black/5" />
+                <div className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity bg-black/20">
+                  <Maximize2 className="w-6 h-6 text-white drop-shadow-md" />
+                </div>
+              </button>
+            ))}
+          </div>
+          
+          <div className="h-6"></div>
+        </div>
+
+        <AnimatePresence>
+          {previewImage && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-[200] bg-black/95 backdrop-blur-sm flex flex-col pt-12 pb-8 px-4"
+            >
+              <div className="flex items-center justify-between mb-8 flex-shrink-0">
+                <h3 className="text-white font-medium">查看大图</h3>
+                <button
+                  onClick={() => setPreviewImage(null)}
+                  className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white/70 hover:text-white"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+              
+              <motion.div 
+                initial={{ scale: 0.95, y: 20 }}
+                animate={{ scale: 1, y: 0 }}
+                exit={{ scale: 0.95, y: 20 }}
+                className="flex-1 relative rounded-2xl overflow-hidden"
+              >
+                <img 
+                  src={previewImage} 
+                  className="absolute inset-0 w-full h-full object-contain"
+                />
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.div>
+    );
+  }
 
   return (
     <motion.div
@@ -7132,11 +7193,9 @@ const MyArchivePage = ({
       </div>
 
       <div className="p-4 space-y-4">
-        {/* 专业名片头部 */}
+        {/* 1. Identity Layer: Professional Card */}
         <div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 relative overflow-hidden">
-          {/* Decorative background */}
           <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-50 to-emerald-50 rounded-bl-full -z-10 opacity-50" />
-
           <div className="flex items-start gap-4">
             <div className="relative">
               <div className="w-20 h-20 rounded-2xl overflow-hidden border-2 border-white shadow-md">
@@ -7154,34 +7213,13 @@ const MyArchivePage = ({
 
             <div className="flex-1 pt-1">
               <div className="flex items-center justify-between mb-1">
-                <div className="flex items-center gap-2">
-                  <h2 className="text-xl font-black text-gray-900 tracking-tight">
-                    沈子怡
-                  </h2>
-                  <button 
-                    onClick={onStatusClick}
-                    className={cn(
-                      "flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold border transition-all active:scale-95 shadow-sm",
-                      statusConfig[orderStatus].bg,
-                      statusConfig[orderStatus].color,
-                      statusConfig[orderStatus].border
-                    )}
-                  >
-                    <div className={cn("w-1.5 h-1.5 rounded-full animate-pulse", statusConfig[orderStatus].dot)} />
-                    {statusConfig[orderStatus].label}
-                    <ChevronDown className="w-3 h-3 opacity-70" />
-                  </button>
-                </div>
+                <h2 className="text-xl font-black text-gray-900 tracking-tight">沈子怡</h2>
                 <div className="flex items-center gap-1 bg-amber-50 text-amber-600 px-2 py-1 rounded-md border border-amber-100">
                   <Medal className="w-3 h-3" />
                   <span className="text-[10px] font-bold">金牌服务</span>
                 </div>
               </div>
-
-              <p className="text-sm font-medium text-gray-600 mb-2">
-                资深全案设计师 · 从业8年
-              </p>
-
+              <p className="text-sm font-medium text-gray-600 mb-2">资深全案设计师 · 从业8年</p>
               <div className="flex flex-wrap gap-x-3 gap-y-1 mb-2">
                 <span className="text-[11px] text-gray-500 flex items-center gap-1">
                   <User className="w-3 h-3" /> 女
@@ -7189,115 +7227,18 @@ const MyArchivePage = ({
                 <span className="text-[11px] text-gray-500 flex items-center gap-1">
                   <MapPin className="w-3 h-3" /> 浙江·杭州
                 </span>
-                <span className="text-[11px] text-gray-500 flex items-center gap-1 truncate max-w-[150px]">
-                  <Home className="w-3 h-3" /> 滨江区江南大道123号
-                </span>
               </div>
-
               <div className="flex flex-wrap gap-1.5">
-                <span className="px-2 py-0.5 bg-blue-50 text-blue-600 text-[10px] font-medium rounded-md border border-blue-100">
-                  全案设计专家
-                </span>
-                <span className="px-2 py-0.5 bg-emerald-50 text-emerald-600 text-[10px] font-medium rounded-md border border-emerald-100">
-                  零差评口碑
-                </span>
-                <span className="px-2 py-0.5 bg-purple-50 text-purple-600 text-[10px] font-medium rounded-md border border-purple-100">
-                  高效履约
-                </span>
+                <span className="px-2 py-0.5 bg-blue-50 text-blue-600 text-[10px] font-medium rounded-md border border-blue-100">全案设计专家</span>
+                <span className="px-2 py-0.5 bg-emerald-50 text-emerald-600 text-[10px] font-medium rounded-md border border-emerald-100">零差评口碑</span>
               </div>
             </div>
           </div>
         </div>
 
-        {/* 三度综合评估 (雷达图) */}
+        {/* 2. Character & Quality: Feedback & WordCloud */}
         <div className="bg-white rounded-3xl p-5 shadow-sm border border-gray-100">
-          <h3 className="text-sm font-bold text-gray-900 mb-4 flex items-center gap-2">
-            <Activity className="w-4 h-4 text-blue-500" />
-            三度综合评估
-          </h3>
-          <div className="h-[240px] w-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <RadarChart
-                cx="50%"
-                cy="50%"
-                outerRadius="70%"
-                data={[
-                  { subject: "信誉度", value: 98, fullMark: 100 },
-                  { subject: "美誉度", value: 95, fullMark: 100 },
-                  { subject: "知名度", value: 88, fullMark: 100 },
-                ]}
-              >
-                <PolarGrid stroke="#e5e7eb" />
-                <PolarAngleAxis
-                  dataKey="subject"
-                  tick={{ fill: "#4b5563", fontSize: 12, fontWeight: 600 }}
-                />
-                <PolarRadiusAxis
-                  angle={30}
-                  domain={[0, 100]}
-                  tick={false}
-                  axisLine={false}
-                />
-                <Radar
-                  name="综合评估"
-                  dataKey="value"
-                  stroke="#07c160"
-                  fill="#07c160"
-                  fillOpacity={0.4}
-                />
-              </RadarChart>
-            </ResponsiveContainer>
-          </div>
-          <div className="grid grid-cols-3 gap-2 mt-2">
-            <div className="text-center">
-              <div className="text-lg font-black text-gray-900">98%</div>
-              <div className="text-[10px] text-gray-500">信誉度</div>
-            </div>
-            <div className="text-center">
-              <div className="text-lg font-black text-gray-900">95%</div>
-              <div className="text-[10px] text-gray-500">美誉度</div>
-            </div>
-            <div className="text-center">
-              <div className="text-lg font-black text-gray-900">88%</div>
-              <div className="text-[10px] text-gray-500">知名度</div>
-            </div>
-          </div>
-        </div>
-
-        {/* 项目履约与服务 */}
-        <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
-          <h3 className="text-sm font-bold text-gray-900 mb-4 flex items-center gap-2">
-            <Target className="w-4 h-4 text-rose-500" />
-            项目履约与服务
-          </h3>
-          <div className="grid grid-cols-3 gap-3">
-            <div className="bg-rose-50/50 rounded-xl p-3 flex flex-col items-center justify-center text-center border border-rose-100/50">
-              <CheckCircle2 className="w-5 h-5 text-rose-500 mb-1" />
-              <span className="text-lg font-bold text-rose-600">96%</span>
-              <span className="text-[10px] text-gray-500 mt-0.5">
-                一次验收通过
-              </span>
-            </div>
-            <div className="bg-blue-50/50 rounded-xl p-3 flex flex-col items-center justify-center text-center border border-blue-100/50">
-              <CalendarCheck className="w-5 h-5 text-blue-500 mb-1" />
-              <span className="text-lg font-bold text-blue-600">100%</span>
-              <span className="text-[10px] text-gray-500 mt-0.5">
-                工期履约率
-              </span>
-            </div>
-            <div className="bg-amber-50/50 rounded-xl p-3 flex flex-col items-center justify-center text-center border border-amber-100/50">
-              <Smile className="w-5 h-5 text-amber-500 mb-1" />
-              <span className="text-lg font-bold text-amber-600">4.9</span>
-              <span className="text-[10px] text-gray-500 mt-0.5">
-                服务态度评分
-              </span>
-            </div>
-          </div>
-        </div>
-
-        {/* 综合评价与真实评语 */}
-        <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center justify-between mb-6">
             <h3 className="text-sm font-bold text-gray-900 flex items-center gap-2">
               <MessageCircle className="w-4 h-4 text-indigo-500" />
               客户评价
@@ -7306,323 +7247,269 @@ const MyArchivePage = ({
               <span className="text-sm font-bold text-gray-900">4.9</span>
               <div className="flex">
                 {[1, 2, 3, 4, 5].map((s) => (
-                  <Star
-                    key={s}
-                    className={cn(
-                      "w-3 h-3",
-                      s <= 4 ? "text-amber-400 fill-amber-400" : "text-gray-200",
-                    )}
-                  />
+                  <Star key={s} className={cn("w-3 h-3", s <= 4 ? "text-amber-400 fill-amber-400" : "text-gray-200")} />
                 ))}
               </div>
             </div>
           </div>
+
+          <div className="flex flex-wrap gap-2 mb-6 justify-center">
+            {["细节控", "审美在线", "专业度高", "沟通顺畅"].map((tag, i) => (
+              <span key={i} className="px-3 py-1 bg-indigo-50 text-indigo-600 text-[10px] font-bold rounded-full border border-indigo-100 shadow-sm">
+                #{tag}
+              </span>
+            ))}
+          </div>
+
           <div className="space-y-3">
             {[
               {
                 user: "王先生",
                 date: "2024.03.12",
-                rating: 5,
                 comment: "沈老师非常专业，从方案设计到后期落地全程贴心跟进，细节控必备！",
-                projectName: "杭州·中海御道二期",
-                taskName: "硬装全案设计",
-                city: "杭州",
-              },
-              {
-                user: "李女士",
-                date: "2023.12.05",
-                rating: 4,
-                comment: "审美在线，沟通非常顺畅，能理解我们的每一个需求，推荐！",
-                projectName: "上海·汤臣一品",
-                taskName: "软装设计搭配",
-                city: "上海",
+                projectName: "中海御道二期",
               },
             ].map((review, i) => (
-              <div key={i} className="bg-gray-50 rounded-xl p-3 border border-gray-100">
-                <div className="flex items-center justify-between mb-1.5">
+              <div key={i} className="bg-slate-50/50 rounded-2xl p-4 border border-slate-100 relative">
+                <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-2">
-                    <span className="text-xs font-bold text-gray-800">{review.user}</span>
-                    <span className="text-[9px] px-1 bg-gray-200 text-gray-500 rounded">{review.city}</span>
+                    <div className="w-6 h-6 rounded-full bg-slate-200" />
+                    <span className="text-[12px] font-bold text-slate-800">{review.user}</span>
                   </div>
-                  <span className="text-[10px] text-gray-400">{review.date}</span>
+                  <span className="text-[10px] text-slate-400">{review.date}</span>
                 </div>
-                <div className="flex items-center gap-2 text-[9px] text-indigo-500 font-medium mb-1.5">
-                  <div className="flex items-center gap-0.5">
-                    <Home className="w-2.5 h-2.5" />
-                    {review.projectName}
-                  </div>
-                  <div className="w-1 h-1 bg-gray-300 rounded-full" />
-                  <div>{review.taskName}</div>
+                <p className="text-[12px] text-slate-600 leading-relaxed font-medium mb-3 italic">“{review.comment}”</p>
+                <div className="flex items-center gap-1.5 text-[10px] text-indigo-400 font-bold bg-white w-fit px-2 py-1 rounded-lg shadow-sm border border-indigo-50">
+                  <Home className="w-3 h-3" /> {review.projectName}
                 </div>
-                <p className="text-[11px] text-gray-600 leading-relaxed font-medium">“{review.comment}”</p>
-              </div>
-            ))}
-            <button className="w-full py-2.5 border border-dashed border-indigo-200 rounded-xl text-[11px] font-bold text-indigo-500 hover:bg-indigo-50 transition-colors flex items-center justify-center gap-1 mt-2">
-              查看更多评价 (24)
-              <ChevronRight className="w-3 h-3" />
-            </button>
-          </div>
-        </div>
-
-        {/* 项目案例 */}
-        <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
-          <h3 className="text-sm font-bold text-gray-900 mb-4 flex items-center gap-2">
-            <Layers className="w-4 h-4 text-emerald-500" />
-            项目案例
-          </h3>
-          <div className="grid grid-cols-2 gap-3">
-            {[
-              {
-                title: "江南壹号院 · 极简美学",
-                image: "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&q=80&w=400",
-                type: "全案设计",
-              },
-              {
-                title: "武林壹号 · 现代轻奢",
-                image: "https://images.unsplash.com/photo-1600607687940-4e2a09695d51?auto=format&fit=crop&q=80&w=400",
-                type: "软装设计",
-              },
-            ].map((project, i) => (
-              <div key={i} className="group cursor-pointer">
-                <div className="aspect-[4/3] rounded-xl overflow-hidden mb-2 relative">
-                  <img src={project.image} alt={project.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                  <div className="absolute top-2 left-2 px-1.5 py-0.5 bg-black/50 backdrop-blur-md rounded text-[9px] text-white">
-                    {project.type}
-                  </div>
-                </div>
-                <h4 className="text-[11px] font-bold text-gray-900 leading-snug line-clamp-2">{project.title}</h4>
               </div>
             ))}
           </div>
         </div>
 
-        {/* 综合认证信息 */}
-        <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
-          <h3 className="text-sm font-bold text-gray-900 mb-4 flex items-center gap-2">
-            <ShieldCheck className="w-4 h-4 text-blue-500" />
-            认证与资质
-          </h3>
-          <div className="grid grid-cols-2 gap-3">
-            <div className="bg-blue-50/50 p-3 rounded-xl border border-blue-100/50 flex flex-col gap-1.5">
-              <span className="text-[10px] font-bold text-blue-700 flex items-center gap-1">
-                <Search className="w-3 h-3" /> 背景调查
-              </span>
-              <span className="text-[12px] font-black text-blue-800">通过</span>
-              <span className="text-[9px] text-blue-500/80">已核实无犯罪记录</span>
-            </div>
-            <div className="bg-emerald-50/50 p-3 rounded-xl border border-emerald-100/50 flex flex-col gap-1.5">
-              <span className="text-[10px] font-bold text-emerald-700 flex items-center gap-1">
-                <ShieldCheck className="w-3 h-3" /> 意外险
-              </span>
-              <span className="text-[12px] font-black text-emerald-800">已投保</span>
-              <span className="text-[9px] text-emerald-500/80">有效期至 2025.01</span>
-            </div>
-            <div className="col-span-2 bg-gray-50 p-3 rounded-xl border border-gray-100">
-              <span className="text-[10px] font-bold text-gray-700 flex items-center gap-1 mb-2">
-                <Camera className="w-3 h-3" /> 实地考察记录
-              </span>
-              <div className="flex gap-2">
-                <div className="w-16 h-12 rounded-lg bg-gray-200 overflow-hidden">
-                   <img src="https://images.unsplash.com/photo-1541123437800-1bb1317badc2?auto=format&fit=crop&q=80&w=200" className="w-full h-full object-cover" />
-                </div>
-                <div className="w-16 h-12 rounded-lg bg-gray-200 overflow-hidden">
-                   <img src="https://images.unsplash.com/photo-1541123223191-2292f7411692?auto=format&fit=crop&q=80&w=200" className="w-full h-full object-cover" />
-                </div>
-                <div className="flex-1 flex flex-col justify-center">
-                  <span className="text-[10px] font-bold text-gray-800">考察人员: 王明</span>
-                  <span className="text-[9px] text-gray-500">2024.01.20 考察通过</span>
-                </div>
+        {/* 3. Professional Capability: Radar & Performance */}
+        <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+          <div className="p-5 border-b border-gray-50 bg-gradient-to-r from-slate-50/50 to-white">
+            <h3 className="text-sm font-bold text-gray-900 flex items-center gap-2">
+              <Activity className="w-4 h-4 text-blue-500" />
+              专业素质评估
+            </h3>
+          </div>
+          <div className="p-5">
+            <div className="grid grid-cols-3 gap-2">
+              <div className="bg-emerald-50/30 rounded-xl p-3 text-center border border-emerald-50">
+                <div className="text-lg font-black text-emerald-600">96%</div>
+                <div className="text-[9px] text-emerald-500 font-bold uppercase tracking-wider">一次通过</div>
+              </div>
+              <div className="bg-blue-50/30 rounded-xl p-3 text-center border border-blue-50">
+                <div className="text-lg font-black text-blue-600">100%</div>
+                <div className="text-[9px] text-blue-500 font-bold uppercase tracking-wider">工期履约</div>
+              </div>
+              <div className="bg-amber-50/30 rounded-xl p-3 text-center border border-amber-50">
+                <div className="text-lg font-black text-amber-600">4.9</div>
+                <div className="text-[9px] text-amber-500 font-bold uppercase tracking-wider">服务质量</div>
               </div>
             </div>
           </div>
         </div>
 
-        {/* 技能培训记录 */}
-        <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
-          <h3 className="text-sm font-bold text-gray-900 mb-4 flex items-center gap-2">
-            <GraduationCap className="w-4 h-4 text-blue-500" />
-            技能培训记录
-          </h3>
-          <div className="space-y-3">
-            <div className="bg-gray-50 rounded-xl p-3 border border-gray-100">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-xs font-bold text-gray-800">
-                  专业技能
-                </span>
-                <span className="text-[10px] text-gray-500">累计 128 学时</span>
-              </div>
-              <ul className="space-y-1.5">
-                <li className="text-[11px] text-gray-600 flex items-center gap-1.5">
-                  <div className="w-1 h-1 rounded-full bg-blue-400" />
-                  高级全案设计进阶班 (2023.11)
-                </li>
-                <li className="text-[11px] text-gray-600 flex items-center gap-1.5">
-                  <div className="w-1 h-1 rounded-full bg-blue-400" />
-                  新型环保材料应用培训 (2023.08)
-                </li>
-              </ul>
-            </div>
-            <div className="bg-gray-50 rounded-xl p-3 border border-gray-100">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-xs font-bold text-gray-800">
-                  良知素养
-                </span>
-                <span className="text-[10px] text-gray-500">累计 46 学时</span>
-              </div>
-              <ul className="space-y-1.5">
-                <li className="text-[11px] text-gray-600 flex items-center gap-1.5">
-                  <div className="w-1 h-1 rounded-full bg-emerald-400" />
-                  从业者职业道德与规范 (2023.12)
-                </li>
-                <li className="text-[11px] text-gray-600 flex items-center gap-1.5">
-                  <div className="w-1 h-1 rounded-full bg-emerald-400" />
-                  客户隐私保护与服务礼仪 (2023.06)
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-
-        {/* 考核记录 */}
-        <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
-          <h3 className="text-sm font-bold text-gray-900 mb-4 flex items-center gap-2">
-            <ClipboardCheck className="w-4 h-4 text-purple-500" />
-            考核记录
-          </h3>
-          <div className="space-y-3">
-            <div className="flex items-center justify-between p-3 bg-purple-50/50 rounded-xl border border-purple-100/50">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center">
-                  <Wand2 className="w-4 h-4 text-purple-600" />
-                </div>
-                <div>
-                  <div className="text-xs font-bold text-gray-900">
-                    专业技能定级考核
-                  </div>
-                  <div className="text-[10px] text-gray-500 mt-0.5">
-                    2023年度考核
-                  </div>
-                </div>
-              </div>
-              <div className="text-right">
-                <div className="text-sm font-bold text-purple-600">A级</div>
-                <div className="text-[10px] text-purple-500/80">优秀</div>
-              </div>
-            </div>
-            <div className="flex items-center justify-between p-3 bg-emerald-50/50 rounded-xl border border-emerald-100/50">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center">
-                  <Heart className="w-4 h-4 text-emerald-600" />
-                </div>
-                <div>
-                  <div className="text-xs font-bold text-gray-900">
-                    良知素养综合评定
-                  </div>
-                  <div className="text-[10px] text-gray-500 mt-0.5">
-                    2023年度评定
-                  </div>
-                </div>
-              </div>
-              <div className="text-right">
-                <div className="text-sm font-bold text-emerald-600">98分</div>
-                <div className="text-[10px] text-emerald-500/80">极佳</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* 评价云词 */}
-        <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
-          <h3 className="text-sm font-bold text-gray-900 mb-4 flex items-center gap-2">
-            <MessageSquare className="w-4 h-4 text-indigo-500" />
-            评价云词
-          </h3>
-          <div className="flex flex-wrap justify-center items-center gap-x-4 gap-y-3 py-4 px-2">
+        {/* 4. Track Record: Cases & Timeline */}
+        <div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100">
+          <h4 className="text-[15px] font-black tracking-tight text-gray-900 mb-5 flex items-center gap-2">
+            <Briefcase className="w-4 h-4 text-emerald-500" /> 近期服务记录
+          </h4>
+          <div className="space-y-0">
             {[
-              {
-                text: "细节控",
-                size: "text-2xl",
-                weight: "font-black",
-                color: "text-purple-600",
-                transform: "-rotate-2",
+              { title: "保利天悦140m²法式复古", role: "主创设计师", date: "2023.10", status: "已完工" },
+              { title: "万科翡翠90m²现代简约", role: "软装搭配", date: "2023.08", status: "已完工" },
+            ].map((project, i, arr) => (
+              <div key={i} className="relative flex gap-4 pb-6 last:pb-0">
+                {i !== arr.length - 1 && <div className="absolute left-[7px] top-[24px] bottom-0 w-[1px] bg-gray-100" />}
+                <div className="relative z-10 flex-shrink-0 w-3.5 h-3.5 rounded-full border-2 border-emerald-400 bg-white mt-1.5" />
+                <div className="flex-1 flex items-start justify-between">
+                  <div>
+                    <h3 className="text-[14px] font-bold text-gray-900 leading-tight mb-1">{project.title}</h3>
+                    <div className="text-[11px] text-gray-400">{project.role} <span className="mx-1">·</span> {project.date}</div>
+                  </div>
+                  <div className="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-lg">DONE</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <button className="w-full mt-4 py-2 bg-slate-50 rounded-xl text-[11px] font-bold text-slate-500 hover:bg-slate-100 transition-colors">
+            查看全部历史项目
+          </button>
+        </div>
+
+        {/* 5. Platform Guarantee (Combined Trust & Official Verification) */}
+        <div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-10 h-10 flex items-center justify-center bg-blue-50 text-blue-600 rounded-xl shadow-sm border border-blue-100">
+              <ShieldCheck className="w-5 h-5" />
+            </div>
+            <div>
+              <h3 className="text-[15px] font-black text-gray-900 tracking-tight flex items-center gap-2">
+                平台联合保障与背调
+              </h3>
+              <p className="text-[10px] text-gray-400 mt-0.5">全量资质深度核验与实地走访，服务更安心</p>
+            </div>
+          </div>
+          
+          <div className="mb-4 bg-gradient-to-r from-blue-50/50 to-emerald-50/50 rounded-2xl p-4 border border-blue-100/50 flex items-center justify-between shadow-sm">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center border border-blue-100">
+                <UserCheck className="w-4 h-4 text-blue-600" />
+              </div>
+              <div>
+                <h3 className="text-[13px] font-bold text-gray-900 mt-0.5">实名身份核验</h3>
+                <p className="text-[10px] text-gray-500 mt-0.5">政府权威数据源核对</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-1 px-2.5 py-1 bg-emerald-500 text-white rounded-lg shadow-sm">
+              <Check className="w-3.5 h-3.5" />
+              <span className="text-[10px] font-bold border-l border-emerald-400 pl-1 ml-0.5">通过审核</span>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 gap-3">
+            {[
+              { 
+                icon: Search, 
+                title: "履历背调", 
+                images: ["https://picsum.photos/seed/bg1/800/1200", "https://picsum.photos/seed/bg2/800/1200"] 
               },
-              {
-                text: "审美在线",
-                size: "text-lg",
-                weight: "font-bold",
-                color: "text-emerald-500",
-                transform: "rotate-1",
+              { 
+                icon: HardHat, 
+                title: "现场考察", 
+                images: ["https://picsum.photos/seed/site1/800/1200", "https://picsum.photos/seed/site2/800/1200", "https://picsum.photos/seed/site3/800/1200"] 
               },
-              {
-                text: "专业度高",
-                size: "text-xl",
-                weight: "font-extrabold",
-                color: "text-blue-600",
-                transform: "-rotate-1",
+              { 
+                icon: Image, 
+                title: "项目案例", 
+                images: ["https://picsum.photos/seed/case1/800/1200", "https://picsum.photos/seed/case2/800/1200"] 
               },
-              {
-                text: "沟通顺畅",
-                size: "text-sm",
-                weight: "font-medium",
-                color: "text-indigo-500",
-                transform: "rotate-2",
+              { 
+                icon: FileCheck, 
+                title: "考试结果", 
+                images: ["https://picsum.photos/seed/exam1/800/1200"] 
               },
-              {
-                text: "负责任",
-                size: "text-base",
-                weight: "font-semibold",
-                color: "text-orange-500",
-                transform: "rotate-0",
+              { 
+                icon: ShieldCheck, 
+                title: "意外保单", 
+                images: ["https://picsum.photos/seed/ins1/800/1200"] 
               },
-              {
-                text: "品味绝佳",
-                size: "text-lg",
-                weight: "font-bold",
-                color: "text-rose-500",
-                transform: "-rotate-2",
-              },
-              {
-                text: "响应及时",
-                size: "text-xs",
-                weight: "font-medium",
-                color: "text-teal-600",
-                transform: "rotate-1",
-              },
-              {
-                text: "预算把控好",
-                size: "text-base",
-                weight: "font-semibold",
-                color: "text-amber-600",
-                transform: "-rotate-1",
-              },
-              {
-                text: "神仙设计",
-                size: "text-sm",
-                weight: "font-medium",
-                color: "text-pink-500",
-                transform: "rotate-2",
-              },
-              {
-                text: "耐心",
-                size: "text-xs",
-                weight: "font-normal",
-                color: "text-slate-500",
-                transform: "-rotate-1",
-              },
-            ].map((tag, i) => (
-              <span
+            ].map((item, i) => (
+              <button 
                 key={i}
-                className={cn(
-                  tag.size,
-                  tag.weight,
-                  tag.color,
-                  tag.transform,
-                  "opacity-90 hover:opacity-100 hover:scale-110 transition-all cursor-default",
-                )}
+                onClick={() => setSelectedArchiveType({ title: item.title, subtitle: "官方现场查验记录", images: item.images })}
+                className="group flex items-center justify-between p-3 rounded-2xl bg-slate-50/50 border border-slate-100/60 transition-all hover:bg-white hover:shadow-md hover:border-blue-100 active:scale-[0.98]"
               >
-                {tag.text}
-              </span>
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-xl bg-white flex items-center justify-center text-slate-400 group-hover:text-blue-500 shadow-sm border border-slate-100 group-hover:border-blue-50 transition-colors">
+                    <item.icon className="w-4 h-4" />
+                  </div>
+                  <div className="text-[13px] font-bold text-gray-900">{item.title}</div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-[10px] font-bold text-emerald-500 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-100">已核验</span>
+                  <ChevronRight className="w-4 h-4 text-slate-300" />
+                </div>
+              </button>
             ))}
+          </div>
+        </div>
+
+        {/* 6. Growth: Training & Exams */}
+        <div className="bg-white rounded-3xl p-5 shadow-sm border border-gray-100">
+          <div className="mb-5">
+            <h3 className="text-sm font-bold text-gray-900 flex items-center gap-2">
+              <GraduationCap className="w-4 h-4 text-purple-500" />
+              培训记录
+            </h3>
+          </div>
+          
+          <div className="space-y-3">
+            {[
+              {
+                title: "软装色彩搭配与空间视觉进阶",
+                institution: "中国室内装饰协会",
+                date: "2024.03.15",
+                images: ["https://picsum.photos/seed/doc1/800/1200", "https://picsum.photos/seed/doc2/800/1200"],
+                type: "证书"
+              },
+              {
+                title: "全案管家服务标准实战培训",
+                institution: "平台官方运营中心",
+                date: "2023.11.20",
+                images: ["https://picsum.photos/seed/cert1/800/1200"],
+                type: "内训"
+              }
+            ].map((record, i) => (
+              <div 
+                key={i}
+                className="p-4 rounded-2xl bg-slate-50/50 border border-slate-100 relative group"
+              >
+                <div className="flex items-start justify-between mb-3">
+                  <div className="flex-1">
+                    <div className="text-[14px] font-bold text-gray-900 leading-tight mb-1">{record.title}</div>
+                    <div className="text-[11px] text-gray-400">{record.institution} <span className="mx-1">·</span> {record.date}</div>
+                  </div>
+                  <span className="text-[10px] font-bold text-purple-600 bg-purple-50 px-2 py-0.5 rounded-md border border-purple-100">
+                    {record.type}
+                  </span>
+                </div>
+                
+                <div className="flex items-center gap-2">
+                  <button 
+                    onClick={() => setSelectedArchiveType({ title: record.title, subtitle: `由 ${record.institution} 颁发`, images: record.images })}
+                    className="flex-1 h-9 flex items-center justify-center gap-2 bg-white border border-slate-200 rounded-xl text-[12px] font-bold text-slate-700 active:scale-[0.98] transition-all hover:border-purple-200 hover:text-purple-600"
+                  >
+                    <FileImage className="w-3.5 h-3.5" />
+                    查看培训附件 ({record.images.length})
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="h-6"></div>
+
+          <h3 className="text-sm font-bold text-gray-900 mb-5 flex items-center gap-2">
+            <Award className="w-4 h-4 text-amber-500" />
+            认证与进修
+          </h3>
+          <div className="space-y-4">
+            <div className="flex items-center justify-between p-3 bg-purple-50/50 rounded-2xl border border-purple-100/50">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-purple-100 flex items-center justify-center border border-purple-200 shadow-sm">
+                  <Wand2 className="w-5 h-5 text-purple-600" />
+                </div>
+                <div>
+                  <div className="text-[13px] font-bold text-gray-900">专业技能定级</div>
+                  <div className="text-[10px] text-gray-400 mt-0.5">2023年度官方考核</div>
+                </div>
+              </div>
+              <div className="bg-white px-3 py-1 rounded-lg border border-purple-100 shadow-sm">
+                <span className="text-[14px] font-black text-purple-600">A级</span>
+              </div>
+            </div>
+
+            <div className="bg-slate-50/50 rounded-2xl p-4 border border-slate-100">
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-[11px] font-bold text-slate-500">累计进修 174 学时</span>
+                <span className="text-[10px] text-emerald-500 font-bold">● 持续学习中</span>
+              </div>
+              <div className="space-y-2">
+                <div className="flex items-center gap-2 text-[11px] text-slate-600">
+                  <div className="w-1.5 h-1.5 rounded-full bg-blue-400" />
+                  高级全案设计进阶班 (2023.11)
+                </div>
+                <div className="flex items-center gap-2 text-[11px] text-slate-600">
+                  <div className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                  从业者素养及诚信规范 (2023.12)
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -7839,10 +7726,10 @@ const ProfilePage = ({
                 bg: "bg-amber-50",
               },
               {
-                icon: IdCard,
-                label: "我的名片",
-                color: "text-blue-500",
-                bg: "bg-blue-50",
+                icon: ShieldCheck,
+                label: "从业者认证",
+                color: "text-emerald-500",
+                bg: "bg-emerald-50",
               },
             ].map((item, idx) => (
               <button
@@ -13053,6 +12940,8 @@ export default function App() {
       setPage("my-archive");
     } else if (label === "我的名片") {
       setPage("my-business-card");
+    } else if (label === "从业者认证") {
+      navigateTo("practitioner-certification");
     } else if (label === "学习中心") {
       navigateTo("learning-center");
     } else if (label === "我的收藏") {
